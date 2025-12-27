@@ -11,8 +11,8 @@ engine = create_engine(
 )
 
 
-Session = sessionmaker(autocommit=False,autoflush=False,bind=engine)
-session = Session()
+SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+session = SessionLocal()
 
 
 Base = declarative_base()
@@ -51,11 +51,11 @@ class Expense(Base):
 
     users = relationship("User",secondary=user_expenses,back_populates="expenses")
 
-Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        session.close()
 
-
-# user = User(first_name="shahin", last_name="abbasi", age=26)
-expense = Expense(expense_name = "car",mount= "12.2121212")
-session.add(expense)
-session.commit()
 
