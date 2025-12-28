@@ -26,6 +26,7 @@ class BaseUserSchema(BaseModel):
             raise ValueError("You must use less than 30 characters")
         if not re.fullmatch(r"^[a-zA-Z]+$",value):
             raise ValueError("Title can contain only letters")
+        return value
             
     @field_serializer("last_name")
     def serialize_name(self,value):

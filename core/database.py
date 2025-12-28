@@ -1,6 +1,6 @@
 from sqlalchemy.orm import declarative_base,relationship,sessionmaker
 from sqlalchemy import (Column, Integer, String, DateTime,func,
-                        Table,ForeignKey,create_engine)
+                        Table,ForeignKey,create_engine,Float)
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./sqlite.db"
 
@@ -45,7 +45,7 @@ class Expense(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     expense_name = Column(String(30),nullable=False)
-    mount = Column(Integer,nullable=False)
+    mount = Column(Float,nullable=False)
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
 
@@ -56,6 +56,6 @@ def get_db():
     try:
         yield db
     finally:
-        session.close()
+        db.close()
 
 
