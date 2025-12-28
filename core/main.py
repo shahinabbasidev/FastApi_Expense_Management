@@ -1,12 +1,12 @@
 from fastapi import FastAPI,HTTPException,status,Depends,Query
 from fastapi.responses import JSONResponse
-from schemas.user_schema import UserCreateSchema,UserResponseSchema,UserUpdateSchema
-from schemas.expense_schema import ExpenseCreateSchema,ExpenseResponseSchema,ExpenseUpdateSchema
+from user_schema import UserCreateSchema,UserResponseSchema,UserUpdateSchema
+from expense_schema import ExpenseCreateSchema,ExpenseResponseSchema,ExpenseUpdateSchema
 from contextlib import asynccontextmanager
 from typing import List,Annotated
 from database import Base,engine,get_db,User,Expense
 from sqlalchemy.orm import Session
-from schemas.user_expense_schema import CreateExpenseWithUserSchema
+from user_expense_schema import CreateExpenseWithUserSchema
 
 
 
@@ -25,22 +25,16 @@ app = FastAPI(lifespan = lifespan)
 
 
 @app.post("/expenses",response_model=CreateExpenseWithUserSchema)
-def create_expense( request:UserCreateSchema,request2:ExpenseCreateSchema,db:Session = Depends(get_db)):
+def create_expense( request:CreateExpenseWithUserSchema,db:Session = Depends(get_db)):
     
-    new_person = User(first_name = request.first_name,last_name = request.last_name,age = request.age)
-    new_expense = Expense(expense_name = request2.expense_name,mount = request2.mount)
+    new_person = User(first_name = request.user.first_name,last_name = request.user.last_name,age = request.user.age)
+    new_expense = Expense(expense_name = request.expense.expense_name,mount = request.expense.mount)
     db.add(new_person)
     db.add(new_expense)
     db.commit()
     
     
-    return {
-    "first_name": new_person.first_name,
-    "last_name": new_person.last_name,
-    "age": new_person.age,
-    "expense_name": new_expense.expense_name,
-    "mount": new_expense.mount
-}
+    return new_person
 
 @app.get("/expenses",response_model=list[UserResponseSchema])
 def get_all_expenses(q:Annotated[str | None, Query(max_length=30)] = None,db:Session = Depends(get_db)):
