@@ -28,13 +28,15 @@ app = FastAPI(lifespan = lifespan)
 def create_expense( request:CreateExpenseWithUserSchema,db:Session = Depends(get_db)):
     
     new_person = User(first_name = request.user.first_name,last_name = request.user.last_name,age = request.user.age)
-    new_expense = Expense(expense_name = request.expense.expense_name,mount = request.expense.mount)
     db.add(new_person)
+    db.commit()
+    new_expense = Expense(expense_name = request.expense.expense_name,mount = request.expense.mount)
     db.add(new_expense)
     db.commit()
-    
-    
-    return new_person
+    return {
+    "user": new_person,
+    "expense": new_expense
+}
 
 @app.get("/expenses",response_model=list[UserResponseSchema])
 def get_all_expenses(q:Annotated[str | None, Query(max_length=30)] = None,db:Session = Depends(get_db)):
