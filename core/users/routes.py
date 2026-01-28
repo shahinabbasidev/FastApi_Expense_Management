@@ -3,14 +3,14 @@ from users.schemas import UserRegisterSchema,UserLoginSchema,UserLogoutSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 import secrets
-from models import UserModel
+from users.models import UserModel
 
 
-rout = APIRouter()
+router = APIRouter()
 async def generate_token(length=32):
     return secrets.token_hex(length)
 
-@rout.post("/login")
+@router.post("/login")
 async def user_login(request: UserLoginSchema, db: Session=Depends(get_db)):
     user_obj = db.query(UserModel).filter_by(
         username=request.username.lower()
@@ -23,7 +23,7 @@ async def user_login(request: UserLoginSchema, db: Session=Depends(get_db)):
         )
     
 
-@rout.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)):
     if db.query(UserModel).filter(
         UserModel.username.ilike(request.username)
@@ -40,7 +40,7 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
 
     return {"detail": "User register successfully", "user_id": user_obj.id}
 
-@rout.post("/logout")
+@router.post("/logout")
 async def user_logout(request: UserLogoutSchema,db: Session=Depends(get_db)):
     
     return{}

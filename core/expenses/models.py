@@ -1,5 +1,4 @@
-from sqlalchemy import (Column, Integer, String, DateTime,func,
-                        Table,ForeignKey,create_engine,Float)
+from sqlalchemy import Column, Integer, String, DateTime,func,Float
 from sqlalchemy.orm import relationship
 from core.database import Base
 import user_expense

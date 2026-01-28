@@ -1,11 +1,11 @@
 from fastapi import APIRouter,Depends,HTTPException,status,Query
-from schemas import ExpenseResponseSchema
+from expenses.schemas import ExpenseResponseSchema
 from fastapi.responses import JSONResponse
 from users.schemas import UserRegisterSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 from typing import List,Annotated
-from models import ExpenseModel
+from expenses.models import ExpenseModel
 from users.models import UserModel
 from user_expense.schemas import CreateExpenseWithUserSchema
 
@@ -23,7 +23,7 @@ async def retrieve_expenses_list(q:Annotated[str | None, Query(max_length=30)] =
     result = query.all()
     return result
 
-@router.get("/expense/{expense_id}",response_model=ExpenseModel)
+@router.get("/expense/{expense_id}",response_model=ExpenseResponseSchema)
 async def retrieve_expense_detail(id:int,db:Session=Depends(get_db)):
     expense = db.query(ExpenseModel).filter_by(id=id).one_or_none()
     if expense:
