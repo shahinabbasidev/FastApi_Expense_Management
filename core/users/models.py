@@ -3,7 +3,7 @@ from sqlalchemy import (Column, Integer, String, DateTime,func,
 from sqlalchemy.orm import relationship
 from core.database import Base
 from passlib.context import CryptContext
-import user_expense
+from user_expense.models import user_expenses
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -22,7 +22,7 @@ class UserModel(Base):
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True),server_default=func.now())
 
-    expenses = relationship("ExpenseModel",secondary=user_expense,back_populates="users")
+    expenses = relationship("ExpenseModel",secondary=user_expenses,back_populates="users")
     
     @staticmethod
     def hash_password(plain_password: str) -> str:

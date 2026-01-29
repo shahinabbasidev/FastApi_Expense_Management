@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime,func,Float
 from sqlalchemy.orm import relationship
 from core.database import Base
-import user_expense
+from user_expense.models import user_expenses
 
 
 class ExpenseModel(Base):
@@ -13,4 +13,4 @@ class ExpenseModel(Base):
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
 
-    users = relationship("UserModel",secondary=user_expense,back_populates="expenses")
+    users = relationship("UserModel",secondary=user_expenses,back_populates="expenses")
