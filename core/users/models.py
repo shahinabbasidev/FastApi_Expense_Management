@@ -22,7 +22,7 @@ class UserModel(Base):
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True),server_default=func.now())
 
-    expenses = relationship("Expense",secondary=user_expense,back_populates="users")
+    expenses = relationship("ExpenseModel",secondary=user_expense,back_populates="users")
     
     @staticmethod
     def hash_password(plain_password: str) -> str:

@@ -13,4 +13,4 @@ class ExpenseModel(Base):
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
 
-    users = relationship("User",secondary=user_expense,back_populates="expenses")
+    users = relationship("UserModel",secondary=user_expense,back_populates="expenses")
