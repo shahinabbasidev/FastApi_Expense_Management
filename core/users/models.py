@@ -34,13 +34,3 @@ class UserModel(Base):
     def set_password(self,plain_text: str):
         self.password = self.hash_password(plain_text)
 
-
-class TokenModel(Base):
-    __tablename__ = "tokens"
-
-    id = Column(Integer,primary_key=True,autoincrement=True)
-    user_id = Column(Integer,ForeignKey("users.id"),nullable=False)
-    token = Column(String(64),nullable=False,unique=True)
-    create_date = Column(DateTime(timezone=True),server_default=func.now())
-
-    user = relationship("UserModel", uselist=False)
