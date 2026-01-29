@@ -1,6 +1,7 @@
-from pydantic import BaseModel, field_validator, Field, field_serializer
+from pydantic import BaseModel, field_validator, Field, field_serializer,ConfigDict
 import re
 from datetime import datetime
+from typing import Optional
 
 class BaseExpenseSchema(BaseModel):
     expense_name : str = Field(...,description="Enter your expenses name")
@@ -21,10 +22,20 @@ class BaseExpenseSchema(BaseModel):
 class ExpenseCreateSchema(BaseExpenseSchema):
     pass
 
+class UserResponseSchema(BaseModel):
+    id: int
+    first_name: str
+    last_name: str 
+
+    model_config = ConfigDict(from_attributes=True)
 
 class ExpenseResponseSchema(BaseExpenseSchema):
     id : int = Field(...,description="Unique identifier of the object")
     create_date : datetime = Field(...,description="Create date and time of the object")
     update_date : datetime = Field(...,description="Update date and time of the object")
+
+    users: list[UserResponseSchema]
+
+    model_config = ConfigDict(from_attributes=True)
 class ExpenseUpdateSchema(BaseExpenseSchema):
     pass

@@ -12,7 +12,7 @@ class UserRegisterSchema(BaseModel):
     first_name : str = Field(...,description="Enter your first name")
     last_name : str = Field(...,description= "Enter your last name")
     username : str = Field(...,description="username for user login")
-    password : str = Field(...,description="password for user login")
+    password : str = Field(...,max_length=64,min_length=8,description="password for user login")
 
     @field_validator("first_name")
     def validate_first_name(cls,value):
@@ -30,6 +30,9 @@ class UserRegisterSchema(BaseModel):
     def validate_last_name(cls,value):
         if len(value) >= 21:
             raise ValueError("You must use less than 21 characters")
+        return value
+        
+        
         
 
     

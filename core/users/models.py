@@ -15,7 +15,7 @@ class UserModel(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     first_name = Column(String(20),nullable=False)
-    last_name = Column(String(20),nullable=True)
+    last_name = Column(String(20),nullable=False)
     username = Column(String(120),nullable=False,unique=True)
     password = Column(Text(200),nullable=False)
     is_active = Column(Boolean,default=True)

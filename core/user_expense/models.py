@@ -4,6 +4,6 @@ from core.database import Base
 user_expenses = Table(
     "users_expenses",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE")),
-    Column("expense_id", Integer, ForeignKey("expenses.id", ondelete="CASCADE"))
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE"),primary_key=True),
+    Column("expense_id", Integer, ForeignKey("expenses.id", ondelete="CASCADE"),primary_key=True)   
 )
