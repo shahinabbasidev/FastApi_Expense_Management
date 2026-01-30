@@ -61,3 +61,15 @@ PUT,/expenses/{id},Update expense,JWT
 DELETE,/expenses/{id},Delete expense,JWT
 GET,/expenses/summary,Monthly/yearly summary stats,JWT
 GET,/categories/,List all categories,JWT
+
+
+Method,Path,Description,Auth required
+POST,/auth/register,Create new user,No
+POST,/auth/login,Login → receive JWT token,No
+GET,/users/me,Get current authenticated user,Yes
+POST,/expenses/,Create new expense,Yes
+GET,/expenses/,List all user expenses,Yes
+GET,/expenses/{expense_id},Get one expense by ID,Yes
+PUT,/expenses/{expense_id},Update expense,Yes
+DELETE,/expenses/{expense_id},Delete expense,Yes
+GET,/categories/,List available categories,Yes (maybe)
