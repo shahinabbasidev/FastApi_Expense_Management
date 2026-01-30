@@ -24,7 +24,7 @@ Clean architecture • Secure • Well-documented • Easy to extend
 ## 🛠️ Tech Stack
 
 - **Language**: Python 3.10+
-- **Framework**: FastAPI (very likely) or Flask
+- **Framework**: FastAPI 
 - **Database**: PostgreSQL / SQLite (development)
 - **ORM**: SQLAlchemy (most probable) or Tortoise-ORM
 - **Authentication**: JWT (PyJWT / python-jose)
@@ -40,3 +40,24 @@ Clean architecture • Secure • Well-documented • Easy to extend
 ```bash
 git clone https://github.com/shahinabbasidev/Design_API_Expense_Management.git
 cd Design_API_Expense_Management
+# using uv (recommended 2025+)
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+
+# or classic way
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+Method,Endpoint,Description,Auth
+POST,/auth/register,Register new user,—
+POST,/auth/login,Login & get JWT,—
+GET,/users/me,Get current user profile,JWT
+POST,/expenses/,Create new expense,JWT
+GET,/expenses/,List expenses (with filters),JWT
+GET,/expenses/{id},Get single expense,JWT
+PUT,/expenses/{id},Update expense,JWT
+DELETE,/expenses/{id},Delete expense,JWT
+GET,/expenses/summary,Monthly/yearly summary stats,JWT
+GET,/categories/,List all categories,JWT
