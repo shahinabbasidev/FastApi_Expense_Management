@@ -25,7 +25,7 @@ class ExpenseCreateSchema(BaseExpenseSchema):
 class UserResponseSchema(BaseModel):
     id: int
     first_name: str
-    last_name: str 
+    last_name: str | None
 
     model_config = ConfigDict(from_attributes=True)
 

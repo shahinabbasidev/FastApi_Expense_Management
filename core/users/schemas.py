@@ -10,7 +10,7 @@ class UserLoginSchema(BaseModel):
 
 class UserRegisterSchema(BaseModel):
     first_name : str = Field(...,description="Enter your first name")
-    last_name : str = Field(...,description= "Enter your last name")
+    last_name : str = Field(None,description="Enter your last name")
     username : str = Field(...,description="username for user login")
     password : str = Field(...,max_length=64,min_length=8,description="password for user login")
 
@@ -33,7 +33,14 @@ class UserRegisterSchema(BaseModel):
         return value
         
         
-        
+class UserResponseSchema(BaseModel):
+    id : int = Field(...,description="Unique identifier of the object")
+    first_name: str = Field(...,description="First name of the user")
+    last_name: str | None = Field(None,description="Last name of the user")
+    username: str = Field(...,description="Username of the user")
+
+    class Config:
+        orm_mode = True  
 
     
 
