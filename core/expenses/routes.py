@@ -38,24 +38,14 @@ async def retrieve_expense_detail(id:int,db:Session=Depends(get_db)):
 
 @router.post("/expenses", response_model=ExpenseResponseSchema)
 async def add_expense(
-    request: CreateExpenseWithUserSchema,
+    request: BaseExpenseSchema,
     db: Session = Depends(get_db)
 ):
-    new_user = UserModel(
-        first_name=request.user.first_name,
-        last_name=request.user.last_name,
-        username=request.user.username,
-        password=UserModel.hash_password(request.user.password),
-    )
-    db.add(new_user)
-    db.flush()
 
     new_expense = ExpenseModel(
-        expense_name=request.expense.expense_name,
-        mount=request.expense.mount,
+        expense_name=request.expense_name,
+        mount=request.mount,
     )
-
-    new_expense.users.append(new_user)
 
     db.add(new_expense)
     db.commit()

@@ -32,7 +32,7 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
             status_code=status.HTTP_409_CONFLICT,
             detail= "Username already exist"
         )
-    user_obj = UserModel(username=request.username.lower())
+    user_obj = UserModel(username=request.username.lower(),first_name=request.first_name,last_name=request.last_name)
     user_obj.set_password(request.password)
     db.add(user_obj)
     db.commit()
