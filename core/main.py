@@ -45,9 +45,9 @@ app.include_router(users_routes)
 @app.post("/set-cooky")
 async def set_cooky(response: Response):
     response.set_cookie(key="shahin",value="abbasi")
-    return {"message":"Come to the dark side, we have cookies"}
+    return {"message":"Cooky has set successfully"}
 
 @app.get("/get-cooky")
 async def get_cooky(request:Request):
     print(request.cookies.get("shahin"))
-    return {"message":"Come to the dark side, we have cookies"}
+    return {"message":"Cooky has set successfully"}

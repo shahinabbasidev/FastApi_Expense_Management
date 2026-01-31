@@ -9,7 +9,7 @@ from jwt.exceptions import DecodeError, InvalidSignatureError
 from core.config import settings
 
 
-security = HTTPBearer(auto_error=False)
+security = HTTPBearer()
 
 
 def get_authenticated_user(
