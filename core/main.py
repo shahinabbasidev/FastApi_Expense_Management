@@ -7,8 +7,8 @@ from users.routes import router as users_routes
 
 tags_metadata = [
     {
-        "name": "tasks",
-        "description": "API for managing tasks with FastAPI",
+        "name": "expenses",
+        "description": "API for managing expenses with FastAPI",
         "externalDocs": {
             "description": "My GitHub",
             "url": "https://github.com/shahinabbasidev"
@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Todo application",
+    title="Expenses management application",
     description="This is a section of description",
     version="0.0.1",
     contact={
