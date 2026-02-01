@@ -30,6 +30,8 @@ class UserRegisterSchema(BaseModel):
     def validate_last_name(cls,value):
         if len(value) >= 21:
             raise ValueError("You must use less than 21 characters")
+        if not re.fullmatch(r"^[a-zA-Z ]+$",value):
+            raise ValueError("Title can contain only letters")
         return value
         
         

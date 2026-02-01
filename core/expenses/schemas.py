@@ -11,7 +11,7 @@ class BaseExpenseSchema(BaseModel):
     def validate_first_name(cls,value):
         if len(value) >= 30:
             raise ValueError("You must use less than 30 characters")
-        if not re.fullmatch(r"^[a-zA-Z1-9_]+$",value):
+        if not re.fullmatch(r"^[a-zA-Z1-9_ ]+$",value):
             raise ValueError("Title can contain only letters,numbers,(_)")
         return value
     

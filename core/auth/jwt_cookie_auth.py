@@ -12,41 +12,65 @@ from core.config import settings
 security = HTTPBearer()
 
 
+from jwt import ExpiredSignatureError
+
 def get_authenticated_user(
-        credentials: HTTPAuthorizationCredentials = Depends(security),
-        db: Session = Depends(get_db)
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db)
 ):
-    
-    # check if credentials are not provided
     if not credentials or not credentials.credentials:
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication failed, token not provided"
         )
+
     token = credentials.credentials
+
     try:
         decoded = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithm="HS256"
+            token,
+            settings.JWT_SECRET_KEY,
+            algorithms=["HS256"]
         )
-        user_id = decoded.get("user_id",None)
-        if not user_id:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, user_id not in the payload"
-            )
-        
+
         if decoded.get("type") != "access":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Authentication failed, token type not valid"
             )
-        if datetime.now() > datetime.fromtimestamp(decoded.get("exp")):
+
+        user_id = decoded.get("user_id")
+        if not user_id:
             raise HTTPException(
-                status_code= status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, token expired"
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication failed, user_id not in payload"
             )
-        user_obj = db.query(UserModel).filter_by(id=user_id).one()
+
+        user_obj = db.query(UserModel).filter_by(id=user_id).first()
+        if not user_obj:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found"
+            )
+
         return user_obj
+
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication failed, token expired"
+        )
+    except InvalidSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication failed, invalid signature"
+        )
+    except DecodeError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication failed, decode failed"
+        )
+
     
     
     except InvalidSignatureError:
@@ -91,7 +115,7 @@ def generate_refresh_token(user_id: int, expires_in: int = 3600*24) -> str:
 def decode_refresh_token(token):
     try:
         decoded = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithms="HS256"
+            token, settings.JWT_SECRET_KEY, algorithm=["HS256"]
         )
         user_id = decoded.get("user_id", None)
         if not user_id:
