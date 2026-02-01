@@ -38,7 +38,6 @@ config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URL)
 from core.database import Base
 from users.models import *
 from expenses.models import *
-from user_expense.models import *
 
 target_metadata = Base.metadata
 

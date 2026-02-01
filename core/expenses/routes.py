@@ -7,7 +7,6 @@ from core.database import get_db
 from typing import List
 from expenses.models import ExpenseModel
 from users.models import UserModel
-from user_expense.schemas import CreateExpenseWithUserSchema
 from auth.jwt_cookie_auth import get_authenticated_user
 
 
