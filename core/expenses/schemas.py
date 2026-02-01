@@ -34,8 +34,6 @@ class ExpenseResponseSchema(BaseExpenseSchema):
     create_date : datetime = Field(...,description="Create date and time of the object")
     update_date : datetime = Field(...,description="Update date and time of the object")
 
-    users: list[UserResponseSchema]
-
     model_config = ConfigDict(from_attributes=True)
 class ExpenseUpdateSchema(BaseExpenseSchema):
     pass

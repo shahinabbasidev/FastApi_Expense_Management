@@ -91,12 +91,8 @@ async def update_expense(id : int,
 async def delete_expense(id : int,
                          db : Session = Depends(get_db),
                          user : UserModel = Depends(get_authenticated_user)):
-    person = db.query(UserModel).filter_by(user_id=user.id,id=id).one_or_none()
+
     expense = db.query(ExpenseModel).filter_by(user_id=user.id,id=id).one_or_none()
-    if person:
-        db.delete(person)
-        db.commit()
-        return JSONResponse(content={"detail":"object remove successfully"},status_code=status.HTTP_200_OK)
     if expense:
         db.delete(expense)
         db.commit()
