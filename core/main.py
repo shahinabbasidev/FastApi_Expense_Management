@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Response,Request
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
@@ -40,13 +40,3 @@ app = FastAPI(
 app.include_router(expenses_routes)
 app.include_router(users_routes)
 
-
-@app.post("/set-cooky")
-async def set_cooky(response: Response):
-    response.set_cookie(key="shahin",value="abbasi")
-    return {"message":"Cooky has set successfully"}
-
-@app.get("/get-cooky")
-async def get_cooky(request:Request):
-    print(request.cookies.get("shahin"))
-    return {"message":"Cooky has set successfully"}

@@ -44,9 +44,5 @@ class UserResponseSchema(BaseModel):
     class Config:
         orm_mode = True  
 
-class UserRefreshTokenSchema(BaseModel):
-    refresh_token : str = Field(...,description="Refresh token for generating new access token")
 
-class UserLogoutSchema(BaseModel):
 
-    pass

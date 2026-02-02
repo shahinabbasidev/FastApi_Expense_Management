@@ -1,33 +1,53 @@
-from fastapi import APIRouter,Depends,HTTPException,status
-from users.schemas import UserRegisterSchema,UserLoginSchema,UserLogoutSchema,UserRefreshTokenSchema
+from fastapi import APIRouter,Depends,HTTPException,status,Response,Request
+from users.schemas import UserRegisterSchema,UserLoginSchema
 from auth.jwt_cookie_auth import generate_access_token,generate_refresh_token,decode_refresh_token
 from sqlalchemy.orm import Session
 from core.database import get_db
 import secrets
 from users.models import UserModel
+from auth.jwt_cookie_auth import get_authenticated_user
 
 
 router = APIRouter(tags=["users"])
 async def generate_token(length=32):
     return secrets.token_hex(length)
 
+
 @router.post("/login")
-async def user_login(request: UserLoginSchema, db: Session=Depends(get_db)):
+async def user_login(
+    request: UserLoginSchema,
+    response: Response,
+    db: Session = Depends(get_db)
+):
     user_obj = db.query(UserModel).filter_by(
         username=request.username.lower()
-        ).first()
+    ).first()
+
     if not user_obj or not user_obj.verify_password(request.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Bearer"}
-        )
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
     access_token = generate_access_token(user_obj.id)
     refresh_token = generate_refresh_token(user_obj.id)
-    return {
-        "access_token": access_token,
-        "refresh_token": refresh_token
-    }
+
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=False, 
+        samesite="Lax",
+        max_age=60*5
+    )
+
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="Lax",
+        max_age=3600*24
+    )
+
+    return {"detail": "Login successful"}
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -48,30 +68,39 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
     return {"detail": "User register successfully", "user_id": user_obj.id}
 
 @router.post("/logout")
-async def user_logout(request: UserLogoutSchema,db: Session=Depends(get_db)):
+async def user_logout(response: Response):
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
     
-    return {"detail": "User logged out successfully", "user_id": request.user_id}
+    return {"detail": "User logged out successfully"}
 
 
 @router.post("/refresh-token")
-async def refresh_access_token(request: UserRefreshTokenSchema, db: Session=Depends(get_db)):
-    try:
-        user_id  = decode_refresh_token(request.refresh_token)
-    except HTTPException:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid refresh token"
-        )
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Could not refresh access token"
-        )
+async def refresh_access_token(
+    request: Request,
+    response: Response,
+    db: Session=Depends(get_db)
+):
+    refresh_token = request.cookies.get("refresh_token")
+    if not refresh_token:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="No refresh token")
+    
+    user_id = decode_refresh_token(refresh_token)
+
     user_obj = db.query(UserModel).filter_by(id=user_id).first()
     if not user_obj:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="User not found")
+  
     new_access_token = generate_access_token(user_obj.id)
-    return {"access_token": new_access_token, "token_type": "bearer"}
+
+    response.set_cookie(
+    key="access_token",
+    value=new_access_token,
+    httponly=True,
+    max_age=60*5,
+    samesite="lax",
+    path="/"
+)
+
+    return {"detail":"Token refreshed",
+            "new_access_token":new_access_token}

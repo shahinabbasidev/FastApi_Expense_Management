@@ -1,5 +1,4 @@
-from fastapi import Depends,HTTPException,status
-from fastapi.security import HTTPAuthorizationCredentials,HTTPBearer
+from fastapi import Depends,HTTPException,status,Request
 from users.models import UserModel
 from core.database import get_db
 from sqlalchemy.orm import Session
@@ -9,22 +8,24 @@ from jwt.exceptions import DecodeError, InvalidSignatureError
 from core.config import settings
 
 
-security = HTTPBearer()
+
 
 
 from jwt import ExpiredSignatureError
 
 def get_authenticated_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    request: Request,
     db: Session = Depends(get_db)
 ):
-    if not credentials or not credentials.credentials:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, token not provided"
-        )
+    
 
-    token = credentials.credentials
+    token = request.cookies.get("access_token")
+
+    if not token:
+        raise HTTPException(
+            status_code=401,
+            detail="Not authenticated"
+        )
 
     try:
         decoded = jwt.decode(
@@ -71,18 +72,13 @@ def get_authenticated_user(
             detail="Authentication failed, decode failed"
         )
 
-    
-    
+       
     except InvalidSignatureError:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="Authentication failed, invalid signature"
         )
-    except DecodeError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, decode failed",
-        )
+ 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -115,7 +111,7 @@ def generate_refresh_token(user_id: int, expires_in: int = 3600*24) -> str:
 def decode_refresh_token(token):
     try:
         decoded = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithm=["HS256"]
+            token, settings.JWT_SECRET_KEY, algorithms=["HS256"]
         )
         user_id = decoded.get("user_id", None)
         if not user_id:
