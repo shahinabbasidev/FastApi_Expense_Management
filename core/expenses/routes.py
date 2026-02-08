@@ -1,7 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException,status,Query
 from expenses.schemas import ExpenseResponseSchema,BaseExpenseSchema
 from fastapi.responses import JSONResponse
-from users.schemas import UserRegisterSchema,UserResponseSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 from typing import List
@@ -56,20 +55,6 @@ async def add_expense(
     return expense_obj
 
 
-@router.put("/person-update/{id}",response_model=UserResponseSchema)
-async def update_person(id : int,
-                        request:UserRegisterSchema,
-                        db : Session = Depends(get_db),
-                        user : UserModel = Depends(get_authenticated_user)):
-    person = db.query(UserModel).filter_by(user_id=user.id,id=id).one_or_none()
-    if person:
-        person.first_name = request.first_name
-        person.last_name = request.last_name
-        db.commit()
-        db.refresh(person)
-        return person
-    else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="object not found")
     
 @router.put("/expense_update/{id}",response_model=ExpenseResponseSchema)
 async def update_expense(id : int,

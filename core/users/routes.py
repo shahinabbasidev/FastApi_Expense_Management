@@ -1,6 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException,status,Response,Request
 from users.schemas import UserRegisterSchema,UserLoginSchema
 from auth.jwt_cookie_auth import generate_access_token,generate_refresh_token,decode_refresh_token
+from users.schemas import UserRegisterSchema,UserResponseSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 import secrets
@@ -104,3 +105,24 @@ async def refresh_access_token(
 
     return {"detail":"Token refreshed",
             "new_access_token":new_access_token}
+
+
+
+@router.put("/user-update",response_model=UserResponseSchema)
+async def update_user(
+    request: UserRegisterSchema,
+    db: Session = Depends(get_db),
+    user: UserModel = Depends(get_authenticated_user)
+):
+    db_user = db.query(UserModel).filter(UserModel.id == user.id).one_or_none()
+
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db_user.first_name = request.first_name
+    db_user.last_name = request.last_name
+
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user
