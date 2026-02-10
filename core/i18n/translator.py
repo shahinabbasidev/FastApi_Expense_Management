@@ -1,47 +1,32 @@
 from fastapi import Request
 from pathlib import Path
 import gettext
+from contextvars import ContextVar
 
 
+_current_translator: ContextVar[gettext.NullTranslations] = ContextVar(
+    "current_translator"
+)
 
-class TranslationManager:
-    """
-    A class that manages translations and handles the installation of the
-    correct language translation at runtime.
-    """
+LOCALES_DIR = Path(__file__).parent / "locales"
+DOMAIN = "messages"
+DEFAULT_LANG = "en"
 
-    _instance = None
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.setup_translation()
-        return cls._instance
-
-    def setup_translation(self):
-        """ Set up translations with a default language (English). """
-        lang = "en"  # Default language is English
-        locales_dir = Path(__file__).parent / "locales"
-        self.translations = gettext.translation(
-            "messages", localedir=locales_dir, languages=[lang], fallback=True
-        )
-        self.translations.install()
-
-    def translate(self, text: str) -> str:
-        """ Return the translated string for the given message. """
-        return self.translations.gettext(text)
-
-async def set_language(request: Request):
-    """ Middleware function to set language based on the Accept-Language header. """
-    translator = TranslationManager()
-    lang = request.headers.get("Accept-Language", "en")
-    locales_dir = Path(__file__).parent / "locales"
-    translator.translations = gettext.translation(
-        "messages", localedir=locales_dir, languages=[lang], fallback=True
+def get_translator(lang: str):
+    return gettext.translation(
+        DOMAIN,
+        localedir=LOCALES_DIR,
+        languages=[lang],
+        fallback=True,
     )
-    translator.translations.install()
+
+
+def set_language(lang: str):
+    translator = get_translator(lang)
+    _current_translator.set(translator)
+
 
 def _(text: str) -> str:
-    """ Shortcut function to access translation for a given string. """
-    translator = TranslationManager()
-    return translator.translate(text)
+    translator = _current_translator.get(get_translator(DEFAULT_LANG))
+    return translator.gettext(text)

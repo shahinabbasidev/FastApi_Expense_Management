@@ -14,6 +14,24 @@ async def generate_token(length=32):
     return secrets.token_hex(length)
 
 
+@router.post("/register", status_code=status.HTTP_201_CREATED)
+async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)):
+    if db.query(UserModel).filter(
+        UserModel.username.ilike(request.username)
+    ).first():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail= "Username already exist"
+        )
+    user_obj = UserModel(username=request.username.lower(),first_name=request.first_name,last_name=request.last_name)
+    user_obj.set_password(request.password)
+    db.add(user_obj)
+    db.commit()
+    db.refresh(user_obj)
+
+    return {"detail": "User register successfully", "user_id": user_obj.id}
+
+
 @router.post("/login")
 async def user_login(
     request: UserLoginSchema,
@@ -51,31 +69,6 @@ async def user_login(
     return {"detail": "Login successful"}
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
-async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)):
-    if db.query(UserModel).filter(
-        UserModel.username.ilike(request.username)
-    ).first():
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail= "Username already exist"
-        )
-    user_obj = UserModel(username=request.username.lower(),first_name=request.first_name,last_name=request.last_name)
-    user_obj.set_password(request.password)
-    db.add(user_obj)
-    db.commit()
-    db.refresh(user_obj)
-
-    return {"detail": "User register successfully", "user_id": user_obj.id}
-
-@router.post("/logout")
-async def user_logout(response: Response):
-    response.delete_cookie("access_token")
-    response.delete_cookie("refresh_token")
-    
-    return {"detail": "User logged out successfully"}
-
-
 @router.post("/refresh-token")
 async def refresh_access_token(
     request: Request,
@@ -106,6 +99,13 @@ async def refresh_access_token(
     return {"detail":"Token refreshed",
             "new_access_token":new_access_token}
 
+
+@router.post("/logout")
+async def user_logout(response: Response):
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    
+    return {"detail": "User logged out successfully"}
 
 
 @router.put("/user-update",response_model=UserResponseSchema)

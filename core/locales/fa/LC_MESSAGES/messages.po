@@ -18,3 +18,53 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+msgid "Your account has been created successfully."
+msgstr ""
+
+
+msgid "You have logged in successfully."
+msgstr ""
+
+
+msgid "You have been logged out successfully."
+msgstr ""
+
+
+msgid "An account with this email already exists."
+msgstr ""
+
+msgid "Password is required."
+msgstr ""
+
+
+
+msgid "No user found with the provided details."
+msgstr ""
+
+
+msgid "Invalid email or password."
+msgstr ""
+
+
+msgid "Your session has expired. Please log in again"
+msgstr ""
+
+
+msgid "Invalid authentication token."
+msgstr ""
+
+
+msgid "The token is invalid or has expired."
+msgstr ""
+
+
+msgid "The password reset link is invalid or has expired."
+msgstr ""
+
+
+msgid "Refresh token not found."
+msgstr ""
+
+
+msgid "Your session has been refreshed successfully."
+msgstr ""
