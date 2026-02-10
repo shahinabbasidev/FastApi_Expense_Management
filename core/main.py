@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
 from fastapi.middleware.cors import CORSMiddleware
-import time
+from i18n.middleware import LanguageMiddleware
 
 
 
@@ -44,17 +44,8 @@ app = FastAPI(
 app.include_router(expenses_routes)
 app.include_router(users_routes,prefix="/users")
 
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    start_time = time.perf_counter()
-    response = await call_next(request)
-    process_time = time.perf_counter() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    return response
-
-
 origins = [
-    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5500"
 ]
 
 app.add_middleware(
@@ -64,3 +55,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.add_middleware(LanguageMiddleware)
