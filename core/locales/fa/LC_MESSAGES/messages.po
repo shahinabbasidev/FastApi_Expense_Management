@@ -19,52 +19,40 @@ msgstr ""
 "Generated-By: Babel 2.18.0\n"
 
 msgid "Your account has been created successfully."
-msgstr ""
-
+msgstr "حساب کاربری شما با موفقیت ایجاد شد."
 
 msgid "You have logged in successfully."
-msgstr ""
-
+msgstr "شما با موفقیت وارد شدید."
 
 msgid "You have been logged out successfully."
-msgstr ""
-
+msgstr "شما با موفقیت خارج شدید."
 
 msgid "An account with this email already exists."
-msgstr ""
+msgstr "حساب کاربری با این ایمیل قبلاً وجود دارد."
 
 msgid "Password is required."
-msgstr ""
-
-
+msgstr "رمز عبور الزامی است."
 
 msgid "No user found with the provided details."
-msgstr ""
-
+msgstr "کاربری با اطلاعات واردشده یافت نشد."
 
 msgid "Invalid email or password."
-msgstr ""
-
+msgstr "ایمیل یا رمز عبور نامعتبر است."
 
 msgid "Your session has expired. Please log in again"
-msgstr ""
-
+msgstr "نشست شما منقضی شده است. لطفاً دوباره وارد شوید."
 
 msgid "Invalid authentication token."
-msgstr ""
-
+msgstr "توکن احراز هویت نامعتبر است."
 
 msgid "The token is invalid or has expired."
-msgstr ""
-
+msgstr "توکن نامعتبر است یا منقضی شده است."
 
 msgid "The password reset link is invalid or has expired."
-msgstr ""
-
+msgstr "لینک بازنشانی رمز عبور نامعتبر است یا منقضی شده است."
 
 msgid "Refresh token not found."
-msgstr ""
-
+msgstr "توکن تازه‌سازی یافت نشد."
 
 msgid "Your session has been refreshed successfully."
-msgstr ""
+msgstr "نشست شما با موفقیت تازه‌سازی شد."

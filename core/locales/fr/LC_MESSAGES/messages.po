@@ -3,56 +3,41 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-msgid ""
-msgstr ""
-"Project-Id-Version: expenses management\n"
-"Report-Msgid-Bugs-To: shahin.abbasi.dev@gmail.com\n"
-"POT-Creation-Date: 2026-02-10 20:13+0330\n"
-"PO-Revision-Date: 2026-02-10 20:15+0330\n"
-"Last-Translator: shahin Abbasi <shahin.abbasi.dev@gmail.com>\n"
-"Language: fr\n"
-"Language-Team: fr <shahin.abbasi.dev@gmail.com>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
-
 msgid "Your account has been created successfully."
-msgstr "حساب کاربری شما با موفقیت ایجاد شد."
+msgstr "Votre compte a été créé avec succès."
 
 msgid "You have logged in successfully."
-msgstr "شما با موفقیت وارد شدید."
+msgstr "Vous vous êtes connecté avec succès."
 
 msgid "You have been logged out successfully."
-msgstr "شما با موفقیت خارج شدید."
+msgstr "Vous vous êtes déconnecté avec succès."
 
 msgid "An account with this email already exists."
-msgstr "حساب کاربری با این ایمیل قبلاً وجود دارد."
+msgstr "Un compte avec cet e-mail existe déjà."
 
 msgid "Password is required."
-msgstr "رمز عبور الزامی است."
+msgstr "Le mot de passe est requis."
 
 msgid "No user found with the provided details."
-msgstr "کاربری با اطلاعات واردشده یافت نشد."
+msgstr "Aucun utilisateur trouvé avec les informations fournies."
 
 msgid "Invalid email or password."
-msgstr "ایمیل یا رمز عبور نامعتبر است."
+msgstr "E-mail ou mot de passe invalide."
 
 msgid "Your session has expired. Please log in again"
-msgstr "نشست شما منقضی شده است. لطفاً دوباره وارد شوید."
+msgstr "Votre session a expiré. Veuillez vous reconnecter."
 
 msgid "Invalid authentication token."
-msgstr "توکن احراز هویت نامعتبر است."
+msgstr "Jeton d'authentification invalide."
 
 msgid "The token is invalid or has expired."
-msgstr "توکن نامعتبر است یا منقضی شده است."
+msgstr "Le jeton est invalide ou a expiré."
 
 msgid "The password reset link is invalid or has expired."
-msgstr "لینک بازنشانی رمز عبور نامعتبر است یا منقضی شده است."
+msgstr "Le lien de réinitialisation du mot de passe est invalide ou a expiré."
 
 msgid "Refresh token not found."
-msgstr "توکن تازه‌سازی یافت نشد."
+msgstr "Jeton de rafraîchissement introuvable."
 
 msgid "Your session has been refreshed successfully."
-msgstr "نشست شما با موفقیت تازه‌سازی شد."
+msgstr "Votre session a été actualisée avec succès."
