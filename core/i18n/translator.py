@@ -13,7 +13,7 @@ DOMAIN = "messages"
 DEFAULT_LANG = "en"
 
 
-def get_translator(lang: str):
+async def get_translator(lang: str):
     return gettext.translation(
         DOMAIN,
         localedir=LOCALES_DIR,
@@ -22,11 +22,13 @@ def get_translator(lang: str):
     )
 
 
-def set_language(lang: str):
+async def set_language(request: Request):
+    lang = request.headers.get("accept-language", DEFAULT_LANG)
+    lang = lang.split(",")[0]
     translator = get_translator(lang)
     _current_translator.set(translator)
 
 
-def _(text: str) -> str:
+async def _(text: str) -> str:
     translator = _current_translator.get(get_translator(DEFAULT_LANG))
     return translator.gettext(text)

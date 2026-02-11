@@ -7,6 +7,7 @@ from core.database import get_db
 import secrets
 from users.models import UserModel
 from auth.jwt_cookie_auth import get_authenticated_user
+from messages.auth import Messages
 
 
 router = APIRouter(tags=["users"])
@@ -29,7 +30,7 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
     db.commit()
     db.refresh(user_obj)
 
-    return {"detail": "User register successfully", "user_id": user_obj.id}
+    return {"detail": Messages.USER_REGISTERED, "user_id": user_obj.id}
 
 
 @router.post("/login")
