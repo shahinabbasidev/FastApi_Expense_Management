@@ -65,20 +65,13 @@ def get_authenticated_user(
     except InvalidSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=Messages.token_invalid
+            detail=Messages.invalid_signature
         )
         
     except DecodeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=Messages.token_invalid_expired
-        )
-
-       
-    except InvalidSignatureError:
-        raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
-            detail=Messages.invalid_signature
         )
  
     except Exception as e:

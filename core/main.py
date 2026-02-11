@@ -1,9 +1,11 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Depends,Request
 from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
 from fastapi.middleware.cors import CORSMiddleware
 from i18n.middleware import LanguageMiddleware
+from openapi import add_language_header
+
 
 
 
@@ -56,5 +58,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+add_language_header(app)
 app.add_middleware(LanguageMiddleware)
+
+
+@app.get("/test-translation")
+async def test_translation(request: Request):
+    from i18n.translator import _, extract_language
+    lang = extract_language(request.headers.get("accept-language"))
+    return {
+        "language": lang,
+        "test_message": _("User already exists"),
+        "header": request.headers.get("accept-language")
+    }
