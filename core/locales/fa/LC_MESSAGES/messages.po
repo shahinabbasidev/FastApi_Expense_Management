@@ -18,26 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-msgid "Your account has been created successfully."
-msgstr "حساب کاربری شما با موفقیت ایجاد شد."
+msgid "User has been created successfully."
+msgstr "کاربر با موفقیت ایجاد شد."
 
 msgid "You have logged in successfully."
-msgstr "شما با موفقیت وارد شدید."
+msgstr "شما با موفقیت وارد حساب کاربری خود شدید."
 
 msgid "You have been logged out successfully."
-msgstr "شما با موفقیت خارج شدید."
+msgstr "شما با موفقیت از حساب کاربری خود خارج شدید."
 
-msgid "An account with this email already exists."
-msgstr "حساب کاربری با این ایمیل قبلاً وجود دارد."
+msgid "User already exists."
+msgstr "کاربری با این اطلاعات از قبل وجود دارد."
 
 msgid "Password is required."
-msgstr "رمز عبور الزامی است."
+msgstr "وارد کردن رمز عبور الزامی است."
 
 msgid "No user found with the provided details."
-msgstr "کاربری با اطلاعات واردشده یافت نشد."
+msgstr "کاربری با اطلاعات ارائه‌شده یافت نشد."
 
-msgid "Invalid email or password."
-msgstr "ایمیل یا رمز عبور نامعتبر است."
+msgid "Invalid username or password."
+msgstr "نام کاربری یا رمز عبور نامعتبر است."
 
 msgid "Your session has expired. Please log in again"
 msgstr "نشست شما منقضی شده است. لطفاً دوباره وارد شوید."
@@ -52,7 +52,27 @@ msgid "The password reset link is invalid or has expired."
 msgstr "لینک بازنشانی رمز عبور نامعتبر است یا منقضی شده است."
 
 msgid "Refresh token not found."
-msgstr "توکن تازه‌سازی یافت نشد."
+msgstr "توکن نوسازی یافت نشد."
 
 msgid "Your session has been refreshed successfully."
-msgstr "نشست شما با موفقیت تازه‌سازی شد."
+msgstr "نشست شما با موفقیت نوسازی شد."
+
+
+
+msgid "Authentication failed, invalid signature."
+msgstr "احراز هویت ناموفق بود، امضای نامعتبر است."
+
+msgid "Authentication failed, payload invalid."
+msgstr "احراز هویت ناموفق بود، محتوای توکن نامعتبر است."
+
+msgid "NOT authenticated."
+msgstr "احراز هویت انجام نشده است."
+
+msgid "Invalid token type. Expected a refresh token."
+msgstr "نوع توکن نامعتبر است. توکن تازه‌سازی مورد انتظار بود."
+
+msgid "Invalid token type. Expected an access token."
+msgstr "نوع توکن نامعتبر است. توکن دسترسی مورد انتظار بود."
+
+msgid "Your profile has been updated successfully."
+msgstr "پروفایل شما با موفقیت به‌روزرسانی شد."

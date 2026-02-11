@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-msgid "Your account has been created successfully."
-msgstr "Ihr Konto wurde erfolgreich erstellt."
+msgid "User has been created successfully."
+msgstr "Der Benutzer wurde erfolgreich erstellt."
 
 msgid "You have logged in successfully."
 msgstr "Sie haben sich erfolgreich angemeldet."
@@ -27,17 +27,17 @@ msgstr "Sie haben sich erfolgreich angemeldet."
 msgid "You have been logged out successfully."
 msgstr "Sie haben sich erfolgreich abgemeldet."
 
-msgid "An account with this email already exists."
-msgstr "Ein Konto mit dieser E-Mail-Adresse existiert bereits."
+msgid "User already exists."
+msgstr "Ein Benutzer mit diesen Daten existiert bereits."
 
 msgid "Password is required."
-msgstr "Passwort ist erforderlich."
+msgstr "Ein Passwort ist erforderlich."
 
 msgid "No user found with the provided details."
 msgstr "Kein Benutzer mit den angegebenen Daten gefunden."
 
-msgid "Invalid email or password."
-msgstr "Ungültige E-Mail-Adresse oder ungültiges Passwort."
+msgid "Invalid username or password."
+msgstr "Ungültiger Benutzername oder Passwort."
 
 msgid "Your session has expired. Please log in again"
 msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
@@ -55,4 +55,26 @@ msgid "Refresh token not found."
 msgstr "Refresh-Token nicht gefunden."
 
 msgid "Your session has been refreshed successfully."
-msgstr "Ihre Sitzung wurde erfolgreich aktualisiert."
+msgstr "Ihre Sitzung wurde erfolgreich erneuert."
+
+
+
+
+msgid "Authentication failed, invalid signature."
+msgstr "Authentifizierung fehlgeschlagen, ungültige Signatur."
+
+msgid "Authentication failed, payload invalid."
+msgstr "Authentifizierung fehlgeschlagen, ungültige Nutzlast."
+
+msgid "NOT authenticated."
+msgstr "Nicht authentifiziert."
+
+msgid "Invalid token type. Expected a refresh token."
+msgstr "Ungültiger Tokentyp. Ein Refresh-Token wurde erwartet."
+
+msgid "Invalid token type. Expected an access token."
+msgstr "Ungültiger Tokentyp. Ein Access-Token wurde erwartet."
+
+msgid "Your profile has been updated successfully."
+msgstr "Ihr Profil wurde erfolgreich aktualisiert."
+

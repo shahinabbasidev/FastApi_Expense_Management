@@ -6,6 +6,7 @@ from datetime import datetime,timedelta,timezone
 import jwt
 from jwt.exceptions import DecodeError, InvalidSignatureError
 from core.config import settings
+from messages.auth import Messages
 
 
 
@@ -24,7 +25,7 @@ def get_authenticated_user(
     if not token:
         raise HTTPException(
             status_code=401,
-            detail="Not authenticated"
+            detail=Messages.not_authenticated
         )
 
     try:
@@ -37,21 +38,21 @@ def get_authenticated_user(
         if decoded.get("type") != "access":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, token type not valid"
+                detail=Messages.access_token_wrong_type
             )
 
         user_id = decoded.get("user_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, user_id not in payload"
+                detail=Messages.payload_invalid
             )
 
         user_obj = db.query(UserModel).filter_by(id=user_id).first()
         if not user_obj:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not found"
+                detail=Messages.user_not_found
             )
 
         return user_obj
@@ -59,24 +60,25 @@ def get_authenticated_user(
     except ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, token expired"
+            detail=Messages.token_expired
         )
     except InvalidSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, invalid signature"
+            detail=Messages.token_invalid
         )
+        
     except DecodeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, decode failed"
+            detail=Messages.token_invalid_expired
         )
 
        
     except InvalidSignatureError:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, invalid signature"
+            detail=Messages.invalid_signature
         )
  
     except Exception as e:
@@ -117,18 +119,18 @@ def decode_refresh_token(token):
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, user_id not in the payload",
+                detail=Messages.payload_invalid,
             )
 
         if decoded.get("type") != "refresh":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, token type not valid",
+                detail=Messages.refresh_token_wrong_type,
             )
         if datetime.now() > datetime.fromtimestamp(decoded.get("exp")):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authentication failed, token expired",
+                detail=Messages.token_expired,
             )
 
         return user_id
@@ -136,12 +138,12 @@ def decode_refresh_token(token):
     except InvalidSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, invalid signature",
+            detail=Messages.invalid_signature,
         )
     except DecodeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication failed, decode failed",
+            detail=Messages.token_invalid_expired,
         )
     except Exception as e:
         raise HTTPException(

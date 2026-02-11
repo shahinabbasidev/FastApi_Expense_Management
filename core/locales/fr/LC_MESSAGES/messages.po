@@ -3,8 +3,8 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-msgid "Your account has been created successfully."
-msgstr "Votre compte a été créé avec succès."
+msgid "User has been created successfully."
+msgstr "L'utilisateur a été créé avec succès."
 
 msgid "You have logged in successfully."
 msgstr "Vous vous êtes connecté avec succès."
@@ -12,8 +12,8 @@ msgstr "Vous vous êtes connecté avec succès."
 msgid "You have been logged out successfully."
 msgstr "Vous vous êtes déconnecté avec succès."
 
-msgid "An account with this email already exists."
-msgstr "Un compte avec cet e-mail existe déjà."
+msgid "User already exists."
+msgstr "Un utilisateur avec ces informations existe déjà."
 
 msgid "Password is required."
 msgstr "Le mot de passe est requis."
@@ -21,8 +21,8 @@ msgstr "Le mot de passe est requis."
 msgid "No user found with the provided details."
 msgstr "Aucun utilisateur trouvé avec les informations fournies."
 
-msgid "Invalid email or password."
-msgstr "E-mail ou mot de passe invalide."
+msgid "Invalid username or password."
+msgstr "Nom d'utilisateur ou mot de passe invalide."
 
 msgid "Your session has expired. Please log in again"
 msgstr "Votre session a expiré. Veuillez vous reconnecter."
@@ -41,3 +41,25 @@ msgstr "Jeton de rafraîchissement introuvable."
 
 msgid "Your session has been refreshed successfully."
 msgstr "Votre session a été actualisée avec succès."
+
+
+
+
+msgid "Authentication failed, invalid signature."
+msgstr "Échec de l'authentification, signature invalide."
+
+msgid "Authentication failed, payload invalid."
+msgstr "Échec de l'authentification, charge utile invalide."
+
+msgid "NOT authenticated."
+msgstr "Non authentifié."
+
+msgid "Invalid token type. Expected a refresh token."
+msgstr "Type de jeton invalide. Un jeton de rafraîchissement était attendu."
+
+msgid "Invalid token type. Expected an access token."
+msgstr "Type de jeton invalide. Un jeton d'accès était attendu."
+
+msgid "Your profile has been updated successfully."
+msgstr "Votre profil a été mis à jour avec succès."
+
