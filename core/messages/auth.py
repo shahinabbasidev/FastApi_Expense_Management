@@ -1,27 +1,86 @@
 from i18n.translator import _
 
 class Messages:
-    registered_successfully = _("User has been created successfully.")
-    logged_in_successfully = _("You have logged in successfully.")
-    logged_out_successfully = _("You have been logged out successfully.")
-    updated_successfully = _("Your profile has been updated successfully.")
-
-    user_already_exists = _("User already exists.")
-    password_missing = _("Password is required.")
-    user_not_found = _("No user found with the provided details.")
-    invalid_credentials =  _("Invalid username or password.")
-
-    token_expired = _("Your session has expired. Please log in again.")
-    access_token_wrong_type = _("Invalid token type. Expected an access token.")
-    refresh_token_wrong_type = _("Invalid token type. Expected a refresh token.")
-    token_invalid = _("Invalid authentication token.")
-    token_invalid_expired = _("The token is invalid or has expired.")
-    reset_link_invalid = _("The password reset link is invalid or has expired.")
-
-
-    refresh_token_not_found = _("Refresh token not found.")
-    token_refreshed_successfully = _("Your session has been refreshed successfully.")
-
-    invalid_signature = _("Authentication failed, invalid signature.")
-    payload_invalid = _("Authentication failed, payload invalid.")
-    not_authenticated = _("NOT authenticated.")
+    @staticmethod
+    def registered_successfully():
+        return _("User has been created successfully.")
+    
+    @staticmethod
+    def logged_in_successfully():
+        return _("You have logged in successfully.")
+    
+    @staticmethod
+    def logged_out_successfully():
+        return _("You have been logged out successfully.")
+    
+    @staticmethod
+    def updated_successfully():
+        return _("Your profile has been updated successfully.")
+    
+    @staticmethod
+    def user_already_exists():
+        return _("User already exists.")
+    
+    @staticmethod
+    def password_missing():
+        return _("Password is required.")
+    
+    @staticmethod
+    def user_not_found():
+        return _("No user found with the provided details.")
+    
+    @staticmethod
+    def invalid_credentials():
+        return _("Invalid username or password.")
+    
+    @staticmethod
+    def token_expired():
+        return _("Your session has expired. Please log in again.")
+    
+    @staticmethod
+    def access_token_wrong_type():
+        return _("Invalid token type. Expected an access token.")
+    
+    @staticmethod
+    def refresh_token_wrong_type():
+        return _("Invalid token type. Expected a refresh token.")
+    
+    @staticmethod
+    def token_invalid():
+        return _("Invalid authentication token.")
+    
+    @staticmethod
+    def token_invalid_expired():
+        return _("The token is invalid or has expired.")
+    
+    @staticmethod
+    def reset_link_invalid():
+        return _("The password reset link is invalid or has expired.")
+    
+    @staticmethod
+    def refresh_token_not_found():
+        return _("Refresh token not found.")
+    
+    @staticmethod
+    def token_refreshed_successfully():
+        return _("Your session has been refreshed successfully.")
+    
+    @staticmethod
+    def invalid_signature():
+        return _("Authentication failed, invalid signature.")
+    
+    @staticmethod
+    def payload_invalid():
+        return _("Authentication failed, payload invalid.")
+    
+    @staticmethod
+    def not_authenticated():
+        return _("NOT authenticated.")
+    
+    @staticmethod
+    def expense_not_found():
+        return _("Expense not found.")
+    
+    @staticmethod
+    def expense_removed_successfully():
+        return _("Expense has been removed successfully.")

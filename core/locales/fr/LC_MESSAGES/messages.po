@@ -63,3 +63,8 @@ msgstr "Type de jeton invalide. Un jeton d'accès était attendu."
 msgid "Your profile has been updated successfully."
 msgstr "Votre profil a été mis à jour avec succès."
 
+msgid "Expense not found."
+msgstr "Dépense non trouvée."
+
+msgid "Expense has been removed successfully."
+msgstr "La dépense a été supprimée avec succès."

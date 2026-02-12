@@ -7,6 +7,7 @@ from typing import List
 from expenses.models import ExpenseModel
 from users.models import UserModel
 from auth.jwt_cookie_auth import get_authenticated_user
+from messages.auth import Messages
 
 
 router = APIRouter(tags=["expenses"])
@@ -35,7 +36,7 @@ async def retrieve_expense_detail(id : int,
     if expense:
         return expense
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="object not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=Messages.expense_not_found())
     
 
 
@@ -69,7 +70,7 @@ async def update_expense(id : int,
         db.refresh(expense)
         return expense
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="object not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=Messages.expense_not_found())
 
 
 @router.delete("/expense/{id}")
@@ -81,6 +82,6 @@ async def delete_expense(id : int,
     if expense:
         db.delete(expense)
         db.commit()
-        return JSONResponse(content={"detail":"object remove successfully"},status_code=status.HTTP_200_OK)
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="object not found")
+        return JSONResponse(content={"detail":Messages.expense_removed_successfully()},status_code=status.HTTP_200_OK)
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=Messages.expense_not_found())
 

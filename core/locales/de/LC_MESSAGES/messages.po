@@ -78,3 +78,8 @@ msgstr "Ungültiger Tokentyp. Ein Access-Token wurde erwartet."
 msgid "Your profile has been updated successfully."
 msgstr "Ihr Profil wurde erfolgreich aktualisiert."
 
+msgid "Expense not found."
+msgstr "Ausgabe nicht gefunden."
+
+msgid "Expense has been removed successfully."
+msgstr "Ausgabe wurde erfolgreich gelöscht."

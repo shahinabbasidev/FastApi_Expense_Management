@@ -76,3 +76,9 @@ msgstr "نوع توکن نامعتبر است. توکن دسترسی مورد ا
 
 msgid "Your profile has been updated successfully."
 msgstr "پروفایل شما با موفقیت به‌روزرسانی شد."
+
+msgid "Expense not found."
+msgstr "هزینه پیدا نشد."
+
+msgid "Expense has been removed successfully."
+msgstr "هزینه با موفقیت حذف شد."

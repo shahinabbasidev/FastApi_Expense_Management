@@ -64,10 +64,3 @@ app.add_middleware(LanguageMiddleware)
 
 
 
-@app.get("/")
-def test(request: Request):
-    return {
-        "header": request.headers.get("accept-language"),
-        "locale": get_current_locale(),
-        "translated": str(_("Hello"))
-    }

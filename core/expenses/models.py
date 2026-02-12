@@ -12,5 +12,6 @@ class ExpenseModel(Base):
     mount = Column(Float,nullable=False)
     create_date = Column(DateTime(timezone=True),server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
+    
 
     user = relationship("UserModel",back_populates="expenses")

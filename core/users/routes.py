@@ -22,13 +22,13 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
     ).first():
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail= Messages.user_already_exists
+            detail= Messages.user_already_exists()
         )
     
     if not request.password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail= Messages.password_missing
+            detail= Messages.password_missing()
         )
     
     user_obj = UserModel(username=request.username.lower(),first_name=request.first_name,last_name=request.last_name)
@@ -38,7 +38,7 @@ async def user_register(request: UserRegisterSchema, db: Session=Depends(get_db)
     db.commit()
     db.refresh(user_obj)
 
-    return {"detail": Messages.registered_successfully, "user_id": user_obj.id}
+    return {"detail": Messages.registered_successfully(), "user_id": user_obj.id}
 
 
 @router.post("/login")
@@ -51,10 +51,10 @@ async def user_login(
         username=request.username.lower()
     ).first()
     if not user_obj:
-        raise HTTPException(status_code=404, detail= Messages.user_not_found)
+        raise HTTPException(status_code=404, detail= Messages.user_not_found())
 
     if not user_obj.verify_password(request.password):
-        raise HTTPException(status_code=401, detail= Messages.invalid_credentials)
+        raise HTTPException(status_code=401, detail= Messages.invalid_credentials())
 
     access_token = generate_access_token(user_obj.id)
     refresh_token = generate_refresh_token(user_obj.id)
@@ -77,7 +77,7 @@ async def user_login(
         max_age=3600*24
     )
 
-    return {"detail": Messages.logged_in_successfully}
+    return {"detail": Messages.logged_in_successfully()}
 
 
 @router.post("/refresh-token")
@@ -94,7 +94,7 @@ async def refresh_access_token(
 
     user_obj = db.query(UserModel).filter_by(id=user_id).first()
     if not user_obj:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=Messages.user_not_found)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=Messages.user_not_found())
   
     new_access_token = generate_access_token(user_obj.id)
 
@@ -107,7 +107,7 @@ async def refresh_access_token(
     path="/"
 )
 
-    return {"detail": Messages.token_refreshed_successfully}
+    return {"detail": Messages.token_refreshed_successfully()}
 
 
 @router.post("/logout")
@@ -115,7 +115,7 @@ async def user_logout(response: Response):
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
     
-    return {"detail": Messages.logged_out_successfully}
+    return {"detail": Messages.logged_out_successfully()}
 
 
 @router.put("/user-update",response_model=UserResponseSchema)
@@ -127,7 +127,7 @@ async def update_user(
     db_user = db.query(UserModel).filter(UserModel.id == user.id).one_or_none()
 
     if not db_user:
-        raise HTTPException(status_code=404, detail= Messages.user_not_found)
+        raise HTTPException(status_code=404, detail= Messages.user_not_found())
 
     db_user.first_name = request.first_name
     db_user.last_name = request.last_name
@@ -135,4 +135,4 @@ async def update_user(
     db.commit()
     db.refresh(db_user)
 
-    return {"detail": Messages.updated_successfully, "user": db_user}
+    return {"detail": Messages.updated_successfully(), "user": db_user}

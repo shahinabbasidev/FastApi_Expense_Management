@@ -9,10 +9,6 @@ DOMAIN = "messages"
 DEFAULT_LANG = "en"
 SUPPORTED_LANGUAGES = {"en", "fr", "fa", "de"}
 
-print("LOCALES_DIR:", LOCALES_DIR)
-print("Exists:", LOCALES_DIR.exists())
-print("FA exists:", (LOCALES_DIR / "fa" / "LC_MESSAGES" / "messages.mo").exists())
-
 _current_translator: ContextVar[gettext.NullTranslations] = ContextVar(
     "current_translator"
 )
@@ -49,7 +45,6 @@ def extract_language(header: str | None) -> str:
 def set_language(request: Request):
     lang_header = request.headers.get("accept-language")
     lang = extract_language(lang_header)
-    print(f"🔍 Header: {lang_header} -> Extracted lang: {lang}") 
     translator = get_translator(lang)
     _current_translator.set(translator)
 
