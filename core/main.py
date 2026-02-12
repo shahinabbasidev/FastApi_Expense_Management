@@ -62,12 +62,12 @@ add_language_header(app)
 app.add_middleware(LanguageMiddleware)
 
 
-@app.get("/test-translation")
-async def test_translation(request: Request):
-    from i18n.translator import _, extract_language
-    lang = extract_language(request.headers.get("accept-language"))
+
+
+@app.get("/")
+def test(request: Request):
     return {
-        "language": lang,
-        "test_message": _("User already exists"),
-        "header": request.headers.get("accept-language")
+        "header": request.headers.get("accept-language"),
+        "locale": get_current_locale(),
+        "translated": str(_("Hello"))
     }

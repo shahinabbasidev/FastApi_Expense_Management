@@ -3,10 +3,15 @@ from pathlib import Path
 import gettext
 from contextvars import ContextVar
 
-LOCALES_DIR = Path(__file__).parent / "locales"
+BASE_DIR = Path(__file__).resolve().parent.parent  # -> core
+LOCALES_DIR = BASE_DIR / "locales"
 DOMAIN = "messages"
 DEFAULT_LANG = "en"
-SUPPORTED_LANGUAGES = {"fr", "fa", "de"}
+SUPPORTED_LANGUAGES = {"en", "fr", "fa", "de"}
+
+print("LOCALES_DIR:", LOCALES_DIR)
+print("Exists:", LOCALES_DIR.exists())
+print("FA exists:", (LOCALES_DIR / "fa" / "LC_MESSAGES" / "messages.mo").exists())
 
 _current_translator: ContextVar[gettext.NullTranslations] = ContextVar(
     "current_translator"
