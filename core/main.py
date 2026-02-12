@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Depends,Request
+from fastapi import FastAPI, Depends, Request
 from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
@@ -6,18 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from i18n.middleware import LanguageMiddleware
 from openapi import add_language_header
 
-
-
-
-
 tags_metadata = [
     {
         "name": "expenses",
         "description": "API for managing expenses with FastAPI",
         "externalDocs": {
             "description": "My GitHub",
-            "url": "https://github.com/shahinabbasidev"
-        }
+            "url": "https://github.com/shahinabbasidev",
+        },
     }
 ]
 
@@ -40,15 +36,13 @@ app = FastAPI(
     },
     license_info={"name": "MIT"},
     lifespan=lifespan,
-    openapi_tags=tags_metadata
+    openapi_tags=tags_metadata,
 )
 
 app.include_router(expenses_routes)
-app.include_router(users_routes,prefix="/users")
+app.include_router(users_routes, prefix="/users")
 
-origins = [
-    "http://127.0.0.1:5500"
-]
+origins = ["http://127.0.0.1:5500"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,7 +54,3 @@ app.add_middleware(
 
 add_language_header(app)
 app.add_middleware(LanguageMiddleware)
-
-
-
-

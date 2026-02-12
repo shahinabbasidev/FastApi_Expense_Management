@@ -15,7 +15,9 @@ ENV_PATH = BASE_DIR / ".env"
 if ENV_PATH.exists():
     load_dotenv(ENV_PATH)
 else:
-    print("Warning: .env file not found. Falling back to system environment variables.")
+    print(
+        "Warning: .env file not found. Falling back to system environment variables."
+    )
 
 SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
 if not SQLALCHEMY_DATABASE_URL:
@@ -41,6 +43,7 @@ from expenses.models import *
 
 target_metadata = Base.metadata
 
+
 # -------------------------------------------------
 # Migration runners
 # -------------------------------------------------
@@ -50,7 +53,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        render_as_batch= True
+        render_as_batch=True,
     )
 
     with context.begin_transaction():
@@ -68,7 +71,7 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            render_as_batch=True
+            render_as_batch=True,
         )
 
         with context.begin_transaction():
