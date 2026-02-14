@@ -29,3 +29,6 @@ SameSite (Strict/Lax) → از ارسال کوکی در درخواست‌های 
 در نتیجه، حملات CSRF تا حد زیادی کاهش می‌یابد.
 
 همچنین می‌توان CSRF Token Pattern را کنار کوکی استفاده کرد (Double Submit Cookie).
+
+
+
