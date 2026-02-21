@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, Field, field_serializer
+from pydantic import BaseModel, field_validator, Field, field_serializer, ConfigDict
 import re
 
 
@@ -42,5 +42,4 @@ class UserResponseSchema(BaseModel):
     last_name: str | None = Field(None, description="Last name of the user")
     username: str = Field(..., description="Username of the user")
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
