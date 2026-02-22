@@ -85,11 +85,11 @@ class Messages:
     @staticmethod
     def expense_removed_successfully():
         return _("Expense has been removed successfully.")
-    
+
     @staticmethod
-    def expense_not_found():
+    def user_not_found():
         return _("User not found.")
-    
+
     @staticmethod
     def user_removed_successfully():
         return _("User has been removed successfully.")

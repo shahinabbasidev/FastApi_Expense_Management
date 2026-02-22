@@ -144,16 +144,18 @@ async def update_user(
 
     return {"detail": Messages.updated_successfully(), "user": db_user}
 
-@router.get("/users", response_model=list[UserResponseSchema])
+@router.get("/", response_model=list[UserResponseSchema])
 async def get_users(db: Session = Depends(get_db)):
     return db.query(UserModel).all()
 
 
-@router.delete("/users/{id}")
+@router.delete("/{id}")
 async def delete_user(
     id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    auth_user: UserModel = Depends(get_authenticated_user),
 ):
+    # currently any authenticated user can delete any account
     user = db.query(UserModel).filter_by(id=id).one_or_none()
 
     if user:
