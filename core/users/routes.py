@@ -142,3 +142,7 @@ async def update_user(
     db.refresh(db_user)
 
     return {"detail": Messages.updated_successfully(), "user": db_user}
+
+@router.get("/users", response_model=list[UserResponseSchema])
+async def get_users(db: Session = Depends(get_db)):
+    return db.query(UserModel).all()
