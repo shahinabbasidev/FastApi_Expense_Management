@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi.responses import JSONResponse
 from users.schemas import UserRegisterSchema, UserLoginSchema
 from auth.jwt_cookie_auth import generate_access_token, generate_refresh_token, decode_refresh_token
 from users.schemas import UserRegisterSchema, UserResponseSchema, UserUpdateResponseSchema
@@ -146,3 +147,24 @@ async def update_user(
 @router.get("/users", response_model=list[UserResponseSchema])
 async def get_users(db: Session = Depends(get_db)):
     return db.query(UserModel).all()
+
+
+@router.delete("/users/{id}")
+async def delete_user(
+    id: int,
+    db: Session = Depends(get_db)
+):
+    user = db.query(UserModel).filter_by(id=id).one_or_none()
+
+    if user:
+        db.delete(user)
+        db.commit()
+        return JSONResponse(
+            content={"detail": Messages.user_removed_successfully()},
+            status_code=status.HTTP_200_OK,
+        )
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=Messages.user_not_found(),
+    )
+

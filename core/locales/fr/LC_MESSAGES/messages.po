@@ -83,3 +83,9 @@ msgstr "Dépense non trouvée."
 
 msgid "Expense has been removed successfully."
 msgstr "La dépense a été supprimée avec succès."
+
+msgid "User not found."
+msgstr "Utilisateur non trouvé."
+
+msgid "User has been removed successfully."
+msgstr "L'utilisateur a été supprimé avec succès."

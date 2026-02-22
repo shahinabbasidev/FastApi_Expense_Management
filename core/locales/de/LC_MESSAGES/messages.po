@@ -83,3 +83,11 @@ msgstr "Ausgabe nicht gefunden."
 
 msgid "Expense has been removed successfully."
 msgstr "Ausgabe wurde erfolgreich gelöscht."
+
+msgid "User not found."
+msgstr "Benutzer nicht gefunden."
+
+msgid "User has been removed successfully."
+msgstr "Benutzer wurde erfolgreich gelöscht."
+
+

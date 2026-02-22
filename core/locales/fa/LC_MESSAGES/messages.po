@@ -82,3 +82,9 @@ msgstr "هزینه پیدا نشد."
 
 msgid "Expense has been removed successfully."
 msgstr "هزینه با موفقیت حذف شد."
+
+msgid "User not found."
+msgstr "کاربر پیدا نشد."
+
+msgid "User has been removed successfully."
+msgstr "کاربر با موفقیت حذف شد."
