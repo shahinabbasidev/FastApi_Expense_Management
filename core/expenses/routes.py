@@ -35,12 +35,12 @@ async def retrieve_expenses_list(
 
 @router.get("/expense/{expense_id}", response_model=ExpenseResponseSchema)
 async def retrieve_expense_detail(
-    id: int,
+    expense_id: int,
     db: Session = Depends(get_db),
     user: UserModel = Depends(get_authenticated_user),
 ):
     expense = (
-        db.query(ExpenseModel).filter_by(user_id=user.id, id=id).one_or_none()
+        db.query(ExpenseModel).filter_by(user_id=user.id, id=expense_id).one_or_none()
     )
     if expense:
         return expense

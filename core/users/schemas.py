@@ -43,3 +43,10 @@ class UserResponseSchema(BaseModel):
     username: str = Field(..., description="Username of the user")
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserUpdateResponseSchema(BaseModel):
+    detail: str
+    user: UserResponseSchema
+
+    model_config = ConfigDict(from_attributes=True)

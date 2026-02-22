@@ -1,3 +1,7 @@
+import os
+# ensure settings loads without errors during testing
+os.environ.setdefault("SQLALCHEMY_DATABASE_URL", "sqlite:///:memory:")
+
 from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool
 from core.database import Base,create_engine,sessionmaker,get_db
@@ -47,53 +51,55 @@ def tear_up_and_down_database():
 
 
 # function
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="function")
 def anon_client():
+    # fresh TestClient for each test to avoid cookie carry‑over
     client = TestClient(app)
     yield client
     
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="function")
 def auth_client(db_session):
     client = TestClient(app)
     user = db_session.query(UserModel).filter_by(username="testuser").one()
     access_token = generate_access_token(user.id)
-    client.headers.update({"Authorization":f"Bearer {access_token}"})
+    # authentication is based on cookies in this project
+    client.cookies.set("access_token", access_token)
     yield client
 
 
 
 @pytest.fixture(scope="package",autouse=True)
 def generate_mock_data(db_session):
+    # create a deterministic user so tests can rely on the credentials
     user = UserModel(
-        username=fake.user_name(),
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
+        username="testuser",
+        first_name="Test",
+        last_name="User",
     )
-    user.set_password("12345678")
+    # use a simple known password
+    user.set_password("testpass")
     db_session.add(user)
     db_session.commit()
     db_session.refresh(user)
-    print(f"User create whit Username: {user.username} and ID: {user.id}")
+    print(f"User created with Username: {user.username} and ID: {user.id}")
 
-    expenses_list = []
-    for _ in range(10):
+    # add a handful of expenses for the test user
+    for i in range(10):
         created_at = fake.date_time_between(start_date="-6M", end_date="now")
 
-        expenses = ExpenseModel(
+        expense = ExpenseModel(
             user_id=user.id,
-            expense_name=fake.word(),  # یا fake.sentence(nb_words=2)
+            expense_name=fake.word(),
             mount=random.randint(50_000, 5_000_000),
             create_date=created_at,
             update_date=fake.date_time_between(
                 start_date=created_at, end_date="now"
             ),
         )
-
-        expenses_list.append(expenses)
-        db_session.add(expenses)
+        db_session.add(expense)
         db_session.commit()
-        db_session.refresh(expenses)
-        print(f"added 10 Expenses for user id {user.id}")
+        db_session.refresh(expense)
+        print(f"added expense {i+1} for user id {user.id}")
 
 @pytest.fixture(scope="function")
 def random_task(db_session):

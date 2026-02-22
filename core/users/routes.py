@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from users.schemas import UserRegisterSchema, UserLoginSchema
 from auth.jwt_cookie_auth import generate_access_token, generate_refresh_token, decode_refresh_token
-from users.schemas import UserRegisterSchema, UserResponseSchema
+from users.schemas import UserRegisterSchema, UserResponseSchema, UserUpdateResponseSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 import secrets
@@ -124,7 +124,7 @@ async def user_logout(response: Response):
     return {"detail": Messages.logged_out_successfully()}
 
 
-@router.put("/user-update", response_model=UserResponseSchema)
+@router.put("/user-update", response_model=UserUpdateResponseSchema)
 async def update_user(
     request: UserRegisterSchema,
     db: Session = Depends(get_db),
