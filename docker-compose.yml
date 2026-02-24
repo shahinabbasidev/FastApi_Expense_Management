@@ -52,7 +52,7 @@ services:
       - redis
     environment:
       SQLALCHEMY_DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
-      JWT_SECRET_KEY: z_f%#7x&0!n6uuamyca%y5swv1(9e=u=wu9s#wy(3f-k__k777
+      JWT_SECRET_KEY: ce0tc2)e@xy3ig_lu4q+jq%@w#!8n1l%do&4l=5z8vmy^^3w)c
       REDIS_URL: redis://redis:6379
     ports:
       - "8000:8000"

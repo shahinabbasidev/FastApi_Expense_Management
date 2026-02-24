@@ -24,7 +24,7 @@ class UserModel(Base):
     first_name = Column(String(20), nullable=False)
     last_name = Column(String(20), nullable=True)
     username = Column(String(120), nullable=False, unique=True)
-    password = Column(Text(200), nullable=False)
+    password = Column(Text, nullable=False)
     is_active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=True), server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
