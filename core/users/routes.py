@@ -10,6 +10,10 @@ from users.models import UserModel
 from auth.jwt_cookie_auth import get_authenticated_user
 from messages.auth import Messages
 from i18n.translator import _
+from fastapi_cache.decorator import cache
+from cache import clear_user_cache,CacheNamespace
+
+
 
 router = APIRouter(tags=["users"])
 
@@ -41,6 +45,8 @@ async def user_register(request: UserRegisterSchema, db: Session = Depends(get_d
     db.add(user_obj)
     db.commit()
     db.refresh(user_obj)
+
+    await clear_user_cache()
 
     return {"detail": Messages.registered_successfully(), "user_id": user_obj.id}
 
@@ -142,9 +148,12 @@ async def update_user(
     db.commit()
     db.refresh(db_user)
 
+    await clear_user_cache()
+
     return {"detail": Messages.updated_successfully(), "user": db_user}
 
 @router.get("/", response_model=list[UserResponseSchema])
+@cache(expire=120,namespace=CacheNamespace.USERS_LIST)
 async def get_users(db: Session = Depends(get_db)):
     return db.query(UserModel).all()
 
@@ -161,6 +170,9 @@ async def delete_user(
     if user:
         db.delete(user)
         db.commit()
+
+        await clear_user_cache()
+
         return JSONResponse(
             content={"detail": Messages.user_removed_successfully()},
             status_code=status.HTTP_200_OK,

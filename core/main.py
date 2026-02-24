@@ -1,10 +1,17 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
 from fastapi.middleware.cors import CORSMiddleware
 from i18n.middleware import LanguageMiddleware
 from openapi import add_language_header
+from core.config import settings
+from collections.abc import AsyncIterator
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.decorator import cache
+from redis import asyncio as aioredis
+
 
 tags_metadata = [
     {
@@ -19,11 +26,17 @@ tags_metadata = [
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Application startup")
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    redis = aioredis.from_url(
+        settings.REDIS_URL,
+        encoding="utf-8",
+        decode_responses=True
+    )
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    
     yield
-    print("Application shutdown")
-
+    
+    await redis.close()
 
 app = FastAPI(
     title="Expenses management application",
@@ -38,6 +51,10 @@ app = FastAPI(
     lifespan=lifespan,
     openapi_tags=tags_metadata,
 )
+
+@cache()
+async def get_cache():
+    return 1
 
 app.include_router(expenses_routes)
 app.include_router(users_routes, prefix="/users")

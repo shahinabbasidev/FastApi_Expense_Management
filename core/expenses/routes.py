@@ -8,11 +8,14 @@ from expenses.models import ExpenseModel
 from users.models import UserModel
 from auth.jwt_cookie_auth import get_authenticated_user
 from messages.auth import Messages
+from cache import clear_expenses_cache,CacheNamespace,user_expenses_cache_key_builder
+from fastapi_cache.decorator import cache
 
 router = APIRouter(tags=["expenses"])
 
 
 @router.get("/expenses", response_model=List[ExpenseResponseSchema])
+@cache(expire=120,namespace=CacheNamespace.EXPENSES_LIST,key_builder=user_expenses_cache_key_builder,)
 async def retrieve_expenses_list(
     completed: bool = Query(
         None, description="Filter expenses based on being completed or no"
@@ -64,6 +67,9 @@ async def add_expense(
     db.add(expense_obj)
     db.commit()
     db.refresh(expense_obj)
+
+    await clear_expenses_cache()
+
     return expense_obj
 
 
@@ -82,6 +88,9 @@ async def update_expense(
         expense.mount = request.mount
         db.commit()
         db.refresh(expense)
+
+        await clear_expenses_cache()
+
         return expense
     else:
         raise HTTPException(
@@ -103,6 +112,9 @@ async def delete_expense(
     if expense:
         db.delete(expense)
         db.commit()
+
+        await clear_expenses_cache()
+
         return JSONResponse(
             content={"detail": Messages.expense_removed_successfully()},
             status_code=status.HTTP_200_OK,
