@@ -69,5 +69,14 @@ def test_pagination_and_limit(auth_client):
     assert resp.status_code == 200
     assert len(resp.json()) == 5
 
+
+def test_sentry_debug_endpoint(auth_client):
+    """The `/sentry-debug` route deliberately raises an exception and should return 500.
+    This proves the endpoint is wired up; Sentry itself will capture the error if a DSN
+    is provided in the environment during runtime.
+    """
+    resp = auth_client.get("/sentry-debug")
+    assert resp.status_code == 500
+
 # we intentionally do not test the 'completed' query parameter because the model does not
 # have an 'is_complete' field; passing it will raise a SQLAlchemy error.
