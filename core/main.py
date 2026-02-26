@@ -12,6 +12,21 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+
+# initialize Sentry only when a DSN is configured (e.g. in staging/production)
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        integrations=[FastApiIntegration()],
+        # performance monitoring (0.0 disables, 1.0 captures 100% of requests)
+        traces_sample_rate=0.1,
+        # add data like request headers and IP for users
+        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+        send_default_pii=True,
+    )
+
 
 
 tags_metadata = [
@@ -76,3 +91,7 @@ app.add_middleware(LanguageMiddleware)
 @app.get("/is-ready",status_code=200)
 async def readiness():
     return JSONResponse(content="ready")
+
+@app.get("/sentry-debug")
+async def trigger_error():
+    division_by_zero = 1 / 0

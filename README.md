@@ -24,7 +24,7 @@ Clean architecture • Secure • Well-documented • Easy to extend
 ## 🛠️ Tech Stack
 
 - **Language**: Python 3.10+
-- **Framework**: FastAPI 
+- **Framework**: FastAPI
 - **Database**: PostgreSQL / SQLite (development)
 - **ORM**: SQLAlchemy (most probable) or Tortoise-ORM
 - **Authentication**: JWT (PyJWT / python-jose)
@@ -35,11 +35,31 @@ Clean architecture • Secure • Well-documented • Easy to extend
 
 ## 🚀 Quick Start
 
+### 📦 Sentry error tracking
+
+This project includes optional Sentry integration for error monitoring and
+performance tracing. The SDK is only activated when the `SENTRY_DSN` setting is
+provided (you can put it in your `.env`). Example:
+
+```
+SENTRY_DSN=https://<public_key>@o0.ingest.sentry.io/12345
+```
+
+On startup the application will initialize the SDK with the FastAPI
+integration and a low default `traces_sample_rate`. A helper endpoint
+`GET /sentry-debug` triggers a division-by-zero error; use it to verify that
+exceptions are being captured while running against a real project.
+
+Feel free to adjust the DSN and sampling settings in `core/main.py`.
+
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/shahinabbasidev/Design_API_Expense_Management.git
 cd Design_API_Expense_Management
+# copy the example environment file and edit to your setup
+cp .env.example .env
+
 # using uv (recommended 2025+)
 uv venv
 source .venv/bin/activate
@@ -73,3 +93,4 @@ GET,/expenses/{expense_id},Get one expense by ID,Yes
 PUT,/expenses/{expense_id},Update expense,Yes
 DELETE,/expenses/{expense_id},Delete expense,Yes
 GET,/categories/,List available categories,Yes (maybe)
+```
