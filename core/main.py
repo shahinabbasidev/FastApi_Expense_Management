@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from expenses.routes import router as expenses_routes
 from users.routes import router as users_routes
@@ -71,3 +72,7 @@ app.add_middleware(
 
 add_language_header(app)
 app.add_middleware(LanguageMiddleware)
+
+@app.get("/is-ready",status_code=200)
+async def readiness():
+    return JSONResponse(content="ready")
