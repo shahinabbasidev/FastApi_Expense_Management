@@ -16,16 +16,13 @@ import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 # initialize Sentry only when a DSN is configured (e.g. in staging/production)
-if settings.SENTRY_DSN:
-    sentry_sdk.init(
-        dsn=settings.SENTRY_DSN,
-        integrations=[FastApiIntegration()],
-        # performance monitoring (0.0 disables, 1.0 captures 100% of requests)
-        traces_sample_rate=0.1,
-        # add data like request headers and IP for users
-        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
-        send_default_pii=True,
-    )
+
+sentry_sdk.init(
+    dsn=settings.SENTRY_DSN,
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
 
 
 

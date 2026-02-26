@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "test"
     REDIS_URL: str
     # Sentry DSN / project key. Can be left empty for local development.
-    SENTRY_DSN: Optional[str] = None
+    SENTRY_DSN: str = "https://5052d08d8859c013ec9c3942d74b2158@sentry.hamravesh.com/9811"
     model_config = SettingsConfigDict(env_file=".env")
 
 
