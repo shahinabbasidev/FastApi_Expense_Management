@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    SQLALCHEMY_DATABASE_URL: str = "postgresql://user:pass@localhost/expenses"
+    SQLALCHEMY_DATABASE_URL: str = 'sqlite:///:memory:'
     JWT_SECRET_KEY: str = "test"
     REDIS_URL: str = "redis://redis:6379"
     # Sentry DSN / project key. Can be left empty for local development.
