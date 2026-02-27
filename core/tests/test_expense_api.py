@@ -78,5 +78,6 @@ def test_sentry_debug_endpoint(auth_client):
     resp = auth_client.get("/sentry-debug")
     assert resp.status_code == 500
 
+
 # we intentionally do not test the 'completed' query parameter because the model does not
 # have an 'is_complete' field; passing it will raise a SQLAlchemy error.
