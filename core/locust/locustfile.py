@@ -1,4 +1,4 @@
-from locust import HttpUser, task, between, constant_pacing
+from locust import HttpUser, task, between
 import random
 import string
 

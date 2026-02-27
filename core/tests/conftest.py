@@ -3,18 +3,18 @@ import os
 os.environ.setdefault("SQLALCHEMY_DATABASE_URL", "sqlite:///:memory:")
 os.environ.setdefault("SENTRY_DSN", "")  # Disable Sentry in tests
 
-from fastapi.testclient import TestClient
-from sqlalchemy import StaticPool
-from core.database import Base,create_engine,sessionmaker,get_db
-from main import app
-import pytest
-from faker import Faker
-from users.models import UserModel
-from expenses.models import ExpenseModel
-from auth.jwt_cookie_auth import generate_access_token
-import random
-from fastapi_cache import FastAPICache
-from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy import StaticPool  # noqa: E402
+from core.database import Base,create_engine,sessionmaker,get_db  # noqa: E402
+from main import app  # noqa: E402
+import pytest  # noqa: E402
+from faker import Faker  # noqa: E402
+from users.models import UserModel  # noqa: E402
+from expenses.models import ExpenseModel  # noqa: E402
+from auth.jwt_cookie_auth import generate_access_token  # noqa: E402
+import random  # noqa: E402
+from fastapi_cache import FastAPICache  # noqa: E402
+from fastapi_cache.backends.inmemory import InMemoryBackend  # noqa: E402
 
 fake = Faker()
 
@@ -61,12 +61,12 @@ def tear_up_and_down_database():
 @pytest.fixture(scope="function")
 def anon_client():
     # fresh TestClient for each test to avoid cookie carry‑over
-    client = TestClient(app)
+    client = TestClient(app,raise_server_exceptions=False)
     yield client
     
 @pytest.fixture(scope="function")
 def auth_client(db_session):
-    client = TestClient(app)
+    client = TestClient(app,raise_server_exceptions=False)
     user = db_session.query(UserModel).filter_by(username="testuser").one()
     access_token = generate_access_token(user.id)
     # authentication is based on cookies in this project

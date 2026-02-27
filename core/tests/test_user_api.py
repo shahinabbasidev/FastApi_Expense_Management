@@ -1,5 +1,4 @@
 
-import pytest
 from users.models import UserModel
 
 
@@ -86,18 +85,23 @@ def test_delete_user_requires_auth(anon_client):
     assert resp.status_code == 401
 
 
-def test_delete_user_success_and_translation(auth_client, anon_client, db_session):
-    # create another user that will be deleted
+def test_delete_user_success_and_translation(anon_client, db_session):
+    # create another user that will be deleted and then authenticate as them
     payload = {"first_name": "Temp", "last_name": "User", "username": "temp_user", "password": "temp1234"}
     reg = anon_client.post("/users/register", json=payload)
     assert reg.status_code == 201, f"register failed: {reg.text}"
     uid = reg.json().get("user_id")
     assert uid is not None
-    # verify the user exists in the database session
+
     usr = db_session.query(UserModel).filter_by(id=uid).one_or_none()
     assert usr is not None, "user missing in db"
+
+    # login as the new user so we have credentials for deletion
+    login = anon_client.post("/users/login", json={"username": "temp_user", "password": "temp1234"})
+    assert login.status_code == 200
+
     # perform deletion with german accept-language header
-    resp = auth_client.delete(f"/users/{uid}", headers={"accept-language": "de"})
+    resp = anon_client.delete(f"/users/{uid}", headers={"accept-language": "de"})
     assert resp.status_code == 200, f"delete failed {resp.status_code} {resp.text}"
     assert "Benutzer" in resp.json()["detail"]
 
@@ -106,6 +110,17 @@ def test_delete_user_not_found(auth_client):
     resp = auth_client.delete("/users/9999999")
     assert resp.status_code == 404
     assert "not found" in resp.json()["detail"].lower()
+
+
+def test_delete_user_forbidden(auth_client, anon_client, db_session):
+    # create a second user and attempt deletion using testuser
+    payload = {"first_name": "Other", "last_name": "User", "username": "other_user", "password": "otherpass"}
+    reg = anon_client.post("/users/register", json=payload)
+    uid = reg.json().get("user_id")
+    # testuser (auth_client) should not be allowed to remove other_user
+    resp = auth_client.delete(f"/users/{uid}")
+    assert resp.status_code == 403
+    assert "not authorized" in resp.json()["detail"].lower()
 
 
 def test_update_user_requires_auth(anon_client):

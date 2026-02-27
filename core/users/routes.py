@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.responses import JSONResponse
-from users.schemas import UserRegisterSchema, UserLoginSchema
+from users.schemas import UserRegisterSchema, UserLoginSchema, UserResponseSchema, UserUpdateResponseSchema
 from auth.jwt_cookie_auth import generate_access_token, generate_refresh_token, decode_refresh_token
-from users.schemas import UserRegisterSchema, UserResponseSchema, UserUpdateResponseSchema
 from sqlalchemy.orm import Session
 from core.database import get_db
 import secrets
@@ -61,7 +60,7 @@ async def user_login(
         username=request.username.lower()
     ).first()
     if not user_obj:
-        raise HTTPException(status_code=404, detail=Messages.user_not_found())
+        raise HTTPException(status_code=404, detail=Messages.user_not_found_details())
 
     if not user_obj.verify_password(request.password):
         raise HTTPException(
@@ -164,21 +163,28 @@ async def delete_user(
     db: Session = Depends(get_db),
     auth_user: UserModel = Depends(get_authenticated_user),
 ):
-    # currently any authenticated user can delete any account
+    # verify existence first
     user = db.query(UserModel).filter_by(id=id).one_or_none()
-
-    if user:
-        db.delete(user)
-        db.commit()
-
-        await clear_user_cache()
-
-        return JSONResponse(
-            content={"detail": Messages.user_removed_successfully()},
-            status_code=status.HTTP_200_OK,
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=Messages.user_not_found(),
         )
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=Messages.user_not_found(),
+
+    # users may only delete their own account
+    if auth_user.id != id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=Messages.user_delete_not_authorized(),
+        )
+
+    db.delete(user)
+    db.commit()
+
+    await clear_user_cache()
+
+    return JSONResponse(
+        content={"detail": Messages.user_removed_successfully()},
+        status_code=status.HTTP_200_OK,
     )
 

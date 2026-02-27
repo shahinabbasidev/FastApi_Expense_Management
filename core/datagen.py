@@ -1,9 +1,7 @@
 from faker import Faker
 from core.database import SessionLocal
-from sqlalchemy.orm import Session
 from users.models import UserModel
 from expenses.models import ExpenseModel
-from datetime import datetime
 import random
 
 fake = Faker()

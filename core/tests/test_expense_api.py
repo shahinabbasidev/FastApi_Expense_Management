@@ -1,4 +1,3 @@
-import pytest
 
 
 def test_list_expenses_requires_auth(anon_client):
@@ -38,12 +37,13 @@ def test_add_expense(auth_client):
 
 
 def test_update_expense(auth_client, random_task):
-    new_data = {"expense_name": "updated name", "mount": 999.0}
+    new_data = {"expense_name": "updated name", "mount": 999.0, "is_complete": True}
     resp = auth_client.put(f"/expense_update/{random_task.id}", json=new_data)
     assert resp.status_code == 200
     body = resp.json()
     assert body["expense_name"] == "Updated Name"
     assert body["mount"] == 999.0
+    assert body["is_complete"] is True
 
 
 def test_update_expense_not_found(auth_client):
@@ -70,6 +70,23 @@ def test_pagination_and_limit(auth_client):
     assert len(resp.json()) == 5
 
 
+def test_filter_completed_flag(auth_client, db_session):
+    # mark one expense complete so filter can exercise
+    from expenses.models import ExpenseModel
+    # set the first expense to complete
+    expense = db_session.query(ExpenseModel).first()
+    expense.is_complete = True
+    db_session.commit()
+
+    resp_true = auth_client.get("/expenses?completed=true")
+    assert resp_true.status_code == 200
+    assert all(item["is_complete"] for item in resp_true.json())
+
+    resp_false = auth_client.get("/expenses?completed=false")
+    assert resp_false.status_code == 200
+    assert all(not item["is_complete"] for item in resp_false.json())
+
+
 def test_sentry_debug_endpoint(auth_client):
     """The `/sentry-debug` route deliberately raises an exception and should return 500.
     This proves the endpoint is wired up; Sentry itself will capture the error if a DSN
@@ -78,5 +95,5 @@ def test_sentry_debug_endpoint(auth_client):
     resp = auth_client.get("/sentry-debug")
     assert resp.status_code == 500
 
-# we intentionally do not test the 'completed' query parameter because the model does not
-# have an 'is_complete' field; passing it will raise a SQLAlchemy error.
+
+# completed filtering is now supported via is_complete field on the model.

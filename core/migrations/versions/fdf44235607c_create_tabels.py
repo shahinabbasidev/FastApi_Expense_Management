@@ -38,6 +38,7 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('expense_name', sa.String(length=30), nullable=False),
     sa.Column('mount', sa.Float(), nullable=False),
+    sa.Column('is_complete', sa.Boolean(), nullable=False, server_default=sa.text('false')),
     sa.Column('create_date', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('update_date', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),

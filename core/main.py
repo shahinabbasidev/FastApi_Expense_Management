@@ -13,7 +13,6 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
 import sentry_sdk
-from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 # initialize Sentry only when a DSN is configured (e.g. in staging/production)
 
@@ -97,16 +96,6 @@ async def general_exception_handler(request, exc):
 async def readiness():
     return JSONResponse(content="ready")
 
-@app.get("/sentry-debug", status_code=500)
+@app.get("/sentry-debug")
 async def trigger_error():
-    """This endpoint intentionally triggers an error to test Sentry integration."""
-    try:
-        division_by_zero = 1 / 0
-    except ZeroDivisionError as e:
-        # Return 500 status code for the error
-        return JSONResponse(
-            status_code=500,
-            content={"detail": "Internal server error", "error": str(e)}
-        )
-    return {"message": "This should not be reached"}
-
+    1 / 0

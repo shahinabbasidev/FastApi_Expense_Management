@@ -6,6 +6,7 @@ from sqlalchemy import (
     func,
     Float,
     ForeignKey,
+    Boolean,
 )
 from sqlalchemy.orm import relationship
 from core.database import Base
@@ -18,6 +19,7 @@ class ExpenseModel(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     expense_name = Column(String(30), nullable=False)
     mount = Column(Float, nullable=False)
+    is_complete = Column(Boolean, default=False, nullable=False)
     create_date = Column(DateTime(timezone=True), server_default=func.now())
     update_date = Column(DateTime(timezone=True), server_default=func.now())
 

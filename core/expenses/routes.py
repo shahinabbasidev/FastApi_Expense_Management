@@ -8,7 +8,7 @@ from expenses.models import ExpenseModel
 from users.models import UserModel
 from auth.jwt_cookie_auth import get_authenticated_user
 from messages.auth import Messages
-from cache import clear_expenses_cache,CacheNamespace,user_expenses_cache_key_builder
+from cache import clear_expenses_cache, CacheNamespace, user_expenses_cache_key_builder
 from fastapi_cache.decorator import cache
 
 router = APIRouter(tags=["expenses"])
@@ -17,8 +17,8 @@ router = APIRouter(tags=["expenses"])
 @router.get("/expenses", response_model=List[ExpenseResponseSchema])
 @cache(expire=120,namespace=CacheNamespace.EXPENSES_LIST,key_builder=user_expenses_cache_key_builder,)
 async def retrieve_expenses_list(
-    completed: bool = Query(
-        None, description="Filter expenses based on being completed or no"
+    completed: bool | None = Query(
+        None, description="Filter expenses based on being completed or not"
     ),
     limit: int = Query(
         10, gt=0, le=50, description="Limiting the number of items to retrieve"
@@ -29,8 +29,10 @@ async def retrieve_expenses_list(
     user: UserModel = Depends(get_authenticated_user),
     db: Session = Depends(get_db),
 ):
+    # only select current user's expenses
     query = db.query(ExpenseModel).filter_by(user_id=user.id)
     if completed is not None:
+        # 'is_complete' column now exists on the model
         query = query.filter_by(is_complete=completed)
 
     return query.limit(limit).offset(offset).all()
@@ -86,6 +88,7 @@ async def update_expense(
     if expense:
         expense.expense_name = request.expense_name
         expense.mount = request.mount
+        expense.is_complete = request.is_complete
         db.commit()
         db.refresh(expense)
 

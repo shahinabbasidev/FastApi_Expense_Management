@@ -6,9 +6,6 @@ from sqlalchemy import (
     func,
     Text,
     Boolean,
-    Table,
-    ForeignKey,
-    create_engine,
 )
 from sqlalchemy.orm import relationship
 from core.database import Base
