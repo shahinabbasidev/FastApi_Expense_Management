@@ -109,5 +109,3 @@ async def trigger_error():
             content={"detail": "Internal server error", "error": str(e)}
         )
     return {"message": "This should not be reached"}
-
-
