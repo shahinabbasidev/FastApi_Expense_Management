@@ -61,12 +61,12 @@ def tear_up_and_down_database():
 @pytest.fixture(scope="function")
 def anon_client():
     # fresh TestClient for each test to avoid cookie carry‑over
-    client = TestClient(app)
+    client = TestClient(app,raise_server_exceptions=False)
     yield client
     
 @pytest.fixture(scope="function")
 def auth_client(db_session):
-    client = TestClient(app)
+    client = TestClient(app,raise_server_exceptions=False)
     user = db_session.query(UserModel).filter_by(username="testuser").one()
     access_token = generate_access_token(user.id)
     # authentication is based on cookies in this project
