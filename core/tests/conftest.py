@@ -12,6 +12,8 @@ from users.models import UserModel
 from expenses.models import ExpenseModel
 from auth.jwt_cookie_auth import generate_access_token
 import random
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
 
 fake = Faker()
 
@@ -32,6 +34,10 @@ def db_session():
         yield db
     finally:
         db.close()
+
+@pytest.fixture(scope="session", autouse=True)
+def init_cache():
+    FastAPICache.init(InMemoryBackend())
 
 
 # module
