@@ -27,7 +27,7 @@ class Messages:
         return _("Password is required.")
 
     @staticmethod
-    def user_not_found():
+    def user_not_found_details():
         return _("No user found with the provided details.")
 
     @staticmethod
@@ -93,3 +93,7 @@ class Messages:
     @staticmethod
     def user_removed_successfully():
         return _("User has been removed successfully.")
+
+    @staticmethod
+    def user_delete_not_authorized():
+        return _("You are not authorized to delete this user.")

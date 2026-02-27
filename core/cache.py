@@ -1,6 +1,4 @@
 from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
-from fastapi_cache.backends.redis import RedisBackend
 
 class CacheNamespace:
     USERS_LIST = "users-list"

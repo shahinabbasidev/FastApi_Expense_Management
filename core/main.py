@@ -13,7 +13,6 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
 import sentry_sdk
-from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 # initialize Sentry only when a DSN is configured (e.g. in staging/production)
 

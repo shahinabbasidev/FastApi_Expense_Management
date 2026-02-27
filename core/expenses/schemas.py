@@ -7,19 +7,20 @@ from pydantic import (
 )
 import re
 from datetime import datetime
-from typing import Optional
 
 
 class BaseExpenseSchema(BaseModel):
     expense_name: str = Field(..., description="Enter your expenses name")
     mount: float = Field(..., gt=0, description="Must be a positive number")
+    is_complete: bool = Field(False, description="Whether the expense has been completed")
 
     @field_validator("expense_name")
     def validate_first_name(cls, value):
         if len(value) >= 30:
             raise ValueError("You must use less than 30 characters")
-        if not re.fullmatch(r"^[a-zA-Z1-9_ ]+$", value):
-            raise ValueError("Title can contain only letters,numbers,(_)")
+        # allow digits including zero, letters, underscores and spaces
+        if not re.fullmatch(r"^[a-zA-Z0-9_ ]+$", value):
+            raise ValueError("Title can contain only letters, numbers, underscore or space")
         return value
 
     @field_serializer("expense_name")
@@ -47,6 +48,8 @@ class ExpenseResponseSchema(BaseExpenseSchema):
     update_date: datetime = Field(
         ..., description="Update date and time of the object"
     )
+
+    model_config = ConfigDict(from_attributes=True)
 
     model_config = ConfigDict(from_attributes=True)
 
