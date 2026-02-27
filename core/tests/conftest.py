@@ -1,6 +1,7 @@
 import os
 # ensure settings loads without errors during testing
 os.environ.setdefault("SQLALCHEMY_DATABASE_URL", "sqlite:///:memory:")
+os.environ.setdefault("SENTRY_DSN", "")  # Disable Sentry in tests
 
 from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool

@@ -85,10 +85,28 @@ app.add_middleware(
 add_language_header(app)
 app.add_middleware(LanguageMiddleware)
 
+@app.exception_handler(Exception)
+async def general_exception_handler(request, exc):
+    """Handle all unhandled exceptions and return 500 status code."""
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"}
+    )
+
 @app.get("/is-ready",status_code=200)
 async def readiness():
     return JSONResponse(content="ready")
 
-@app.get("/sentry-debug")
+@app.get("/sentry-debug", status_code=500)
 async def trigger_error():
-    division_by_zero = 1 / 0
+    """This endpoint intentionally triggers an error to test Sentry integration."""
+    try:
+        division_by_zero = 1 / 0
+    except ZeroDivisionError as e:
+        # Return 500 status code for the error
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error", "error": str(e)}
+        )
+    return {"message": "This should not be reached"}
+
