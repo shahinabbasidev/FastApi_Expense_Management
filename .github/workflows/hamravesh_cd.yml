@@ -1,6 +1,6 @@
 name: expenses-management_deployment
 
-"on":
+on:
   push:
     branches:
       - stage
